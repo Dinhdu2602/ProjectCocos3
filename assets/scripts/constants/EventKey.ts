@@ -1,0 +1,9 @@
+export const EVENT = {
+    GAME_START: "GAME_START",
+    GAME_OVER: "GAME_OVER",
+    EXIT_TO_LOBBY: "EXIT_TO_LOBBY",
+
+    PLAYER_HIT: "PLAYER_HIT",
+    ENEMY_DIE: "ENEMY_DIE",
+    RESET_GAME: "RESET_GAME",
+};
