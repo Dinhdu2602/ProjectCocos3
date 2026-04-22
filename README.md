@@ -365,7 +365,7 @@ Popup không thuộc riêng Screen nào:
 
 ---
 
-# 7. SYSTEM RESPONSIBILITY (RẤT QUAN TRỌNG)
+# 7. SYSTEM RESPONSIBILITY
 
 ---
 
@@ -425,7 +425,7 @@ Popup không thuộc riêng Screen nào:
 
 ---
 
-# 8. DESIGN RULES (RẤT QUAN TRỌNG)
+# 8. DESIGN RULES
 
 ---
 
@@ -461,68 +461,67 @@ Popup không thuộc riêng Screen nào:
 
 #  9. GHI CHÚ KIẾN TRÚC
 
-* Layer = tổ chức hiển thị
-* Screen = tổ chức UI
-* State = tổ chức logic
-
-=> Ba thứ này phải tách biệt hoàn toàn
+        * Layer = tổ chức hiển thị
+        * Screen = tổ chức UI
+        * State = tổ chức logic
+        => Ba thứ này phải tách biệt hoàn toàn
 
 ---
 
-# 6. SOUND REQUIREMENTS
-## 6.1 Sound Effect 
+# 10. SOUND REQUIREMENTS
+## 10.1 Sound Effect 
  - Bắn
  - Trúng
  - Enemy chết
 ---------
-## 6.2 Background Music
+## 10.2 Background Music
  - Lobby 
  - Gameplay
 --------
-## 6.3 Setting
+## 10.3 Setting
  - Cho phép bật/tắt sound
 ---------
-# 7. UNIQUE FEATURES
-## 7.1 Hệ thống đổi đạn (Bullet Swap):
+# 11. UNIQUE FEATURES
+## 11.1 Hệ thống đổi đạn (Bullet Swap):
  - Người chơi đổi đạn bằng phím `E, R, T`
  - Mỗi loại tạo gameplay khác nhau
 ---------
-## 7.2 Combo System
+## 11.2 Combo System
  - Bắn liên tục -> Tăng `Damage`
  - Miss -> Reset combo
 ---------
-## 7.3 Hit Feedback
+## 11.3 Hit Feedback
  - Enemy bị hit -> flash
  - Player bị hit -> rung màn hình
 ---------
-## 7.4 Event-driven Design
+## 11.4 Event-driven Design
  - `Room` phát eventevent -> Các module nhận
  - Giảm phụ thuộc giữa các hệ thống
 ---------
-# 8. NON-FUNCTIONAL REQUIREMENTS
-## 8.1 Code Quality:
+# 12. NON-FUNCTIONAL REQUIREMENTS
+## 12.1 Code Quality:
 - Code phải dễ đọc, dễ hiểu
 - Không viết tắt tên biến
 - `Function` chỉ làm một nhiệm vụ
 ---------
-## 8.2 Performance:
+## 12.2 Performance:
 - Game chạy mượt **(>= 60 FPS)**
 - Hạn chế draw call
 - Tối ưu `Prefab` và `Sprite`
 ---------
-## 8.3 Maintainability
+## 12.3 Maintainability
 - Code tách module rõ ràng
 - Dễ thêm tính năng mới
 ---------
-# 9. FUTURE EXTENSION:
+# 13. FUTURE EXTENSION:
 - Skill System
 - Boss
 - Upgrade weapon
 - Multiplayer
 --------
-# 10. SEQUENCE FLOW (RUNTIME FLOW)
+# 14. SEQUENCE FLOW (RUNTIME FLOW)
 
-## 10.1 Flow: Player Attack → Enemy Damage
+## 14.1 Flow: Player Attack → Enemy Damage
 
 ### Mô tả:
 
@@ -570,7 +569,7 @@ Luồng xử lý khi player tấn công và gây damage lên enemy.
 
 ---
 
-## 10.2 Flow: Enemy Attack → Player Damage
+## 14.2 Flow: Enemy Attack → Player Damage
 
 ### Trình tự:
 
@@ -598,7 +597,7 @@ Luồng xử lý khi player tấn công và gây damage lên enemy.
 
 ---
 
-## 10.3 Flow: Game Start
+## 14.3 Flow: Game Start
 
 1. Người chơi ở màn `Lobby`
 
@@ -625,7 +624,7 @@ Luồng xử lý khi player tấn công và gây damage lên enemy.
 
 ---
 
-## 10.4 Flow: Game Over (Time Up)
+## 14.4 Flow: Game Over (Time Up)
 
 1. `Timer` đạt 0
 
@@ -645,7 +644,7 @@ Luồng xử lý khi player tấn công và gây damage lên enemy.
 
 ---
 
-## 10.5 Flow: Replay
+## 14.5 Flow: Replay
 
 1. Người chơi nhấn `Replay`
 
@@ -663,7 +662,7 @@ Luồng xử lý khi player tấn công và gây damage lên enemy.
 
 ---
 
-## 10.6 Flow: Exit về Lobby
+## 14.6 Flow: Exit về Lobby
 
 1. Người chơi nhấn `Exit`
 
@@ -678,7 +677,7 @@ Luồng xử lý khi player tấn công và gây damage lên enemy.
 
 ---
 
-## 10.7 Flow: Swap Bullet
+## 14.7 Flow: Swap Bullet
 
 1. Người chơi nhấn phím `(E / R / T)`
 
@@ -694,7 +693,7 @@ Luồng xử lý khi player tấn công và gây damage lên enemy.
 
 ---
 
-## 10.8 Flow: Combo System
+## 14.8 Flow: Combo System
 
 1. `Player` bắn trúng `Enemy` liên tục
 
@@ -710,11 +709,11 @@ Luồng xử lý khi player tấn công và gây damage lên enemy.
 
 ---
 
-# 11. DATA TABLE (GAME BALANCE)
+# 15. DATA TABLE (GAME BALANCE)
 
 ---
 
-## 11.1 Player Data
+## 15.1 Player Data
 
 | Thuộc tính   | Giá trị     |
 | ------------ | ----------- |
@@ -725,7 +724,7 @@ Luồng xử lý khi player tấn công và gây damage lên enemy.
 
 ---
 
-## 11.2 Bullet Data
+## 15.2 Bullet Data
 
 ### Bullet Normal
 
@@ -760,7 +759,7 @@ Luồng xử lý khi player tấn công và gây damage lên enemy.
 
 ---
 
-## 11.3 Enemy Data
+## 15.3 Enemy Data
 
 ### Enemy A (Chaser)
 
@@ -795,7 +794,7 @@ Luồng xử lý khi player tấn công và gây damage lên enemy.
 
 ---
 
-## 11.4 Game Config
+## 15.4 Game Config
 
 | Thuộc tính          | Giá trị |
 | ------------------- | ------- |
@@ -805,7 +804,7 @@ Luồng xử lý khi player tấn công và gây damage lên enemy.
 
 ---
 
-## 11.5 Combo System
+## 15.5 Combo System
 
 | Level | Hits Required | Damage Bonus |
 | ----- | ------------- | ------------ |
@@ -815,7 +814,7 @@ Luồng xử lý khi player tấn công và gây damage lên enemy.
 
 ---
 
-## 11.6 Score System
+## 15.6 Score System
 
 | Action       | Score |
 | ------------ | ----- |
@@ -823,16 +822,14 @@ Luồng xử lý khi player tấn công và gây damage lên enemy.
 | Kill Enemy B | +20   |
 | Kill Enemy C | +30   |
 
----
 
-#  12. GHI CHÚ THIẾT KẾ
 
-* Data Table có thể điều chỉnh để balance game
-* Có thể tách thành config file sau này
-* Sequence Flow dùng để debug logic runtime
+    * Data Table có thể điều chỉnh để balance game
+    * Có thể tách thành config file sau này
+    * Sequence Flow dùng để debug logic runtime
 
 ---
-# 13. KẾT LUẬN
+# 16. KẾT LUẬN
 Tài liệu này là nền tảng để:
     
 - Phát triển game
