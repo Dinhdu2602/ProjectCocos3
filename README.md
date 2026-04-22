@@ -257,7 +257,7 @@ Game Layer (Root)
 ---
 
 ###  UILayer (HUD)
-
+`HUD - UI hiển thị trong lúc đang chơi`
 Hiển thị:
 
 * HP Player
