@@ -11,8 +11,17 @@ class EventEmitter {
         if (!this.events.has(event)) {
             this.events.set(event, []);
         }
-        console.log("EventEmitter loaded");
-        this.events.get(event)!.push({ callback, target });
+
+        const listeners = this.events.get(event)!;
+
+        
+        const exists = listeners.some(
+            l => l.callback === callback && l.target === target
+        );
+
+        if (exists) return;
+
+        listeners.push({ callback, target });
     }
 
     off(event: string, callback: Callback, target?: any) {
@@ -29,12 +38,32 @@ class EventEmitter {
     }
 
     emit(event: string, data?: any) {
-        if (!this.events.has(event)) return;
+    if (!this.events.has(event)) return;
 
-        this.events.get(event)!.forEach(listener => {
-            listener.callback.call(listener.target, data);
-        });
+    const listeners = this.events.get(event)!;
+
+    this.events.set(
+        event,
+        listeners.filter((l, index) => {
+            try {
+                if (l.target && !l.target.isValid) {
+                    console.warn("remove dead listener", event, index);
+                    return false;
+                }
+
+                l.callback.call(l.target, data);
+                return true;
+            } catch (e) {
+                console.error("crash listener:", event, index, l);
+                return false;
+            }
+        })
+    );
+}
+
+    clear() {
+        this.events.clear();
     }
 }
 
-export default new EventEmitter();
+export const eventEmitter = new EventEmitter();

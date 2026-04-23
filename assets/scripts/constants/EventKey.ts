@@ -6,4 +6,6 @@ export const EVENT = {
     PLAYER_HIT: "PLAYER_HIT",
     ENEMY_DIE: "ENEMY_DIE",
     RESET_GAME: "RESET_GAME",
-};
+
+    TIME_UP: "TIME_UP", 
+} 

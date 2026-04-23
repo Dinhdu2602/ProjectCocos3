@@ -1,6 +1,6 @@
 import { _decorator, Component, Node, input, Input, EventKeyboard, KeyCode, Vec3 } from 'cc'
 import { EVENT }  from '../constants/EventKey';
-import EventEmitter from '../core/EventEmitter';
+import { eventEmitter } from '../core/EventEmitter';
 
 const { ccclass, property } = _decorator;
 
@@ -17,14 +17,13 @@ export class PlayerSystem extends Component {
     private inputDirection: Vec3 = new Vec3();
 
     onLoad() {
-        console.log("PLAYER LOAD");
         this.registerInput(); 
-        EventEmitter.on(EVENT.GAME_START, this.onGameStart, this);
+        eventEmitter.on(EVENT.GAME_START, this.onGameStart, this);
     }
 
     onDestroy() {
         this.unregisterInput();
-        EventEmitter.off(EVENT.GAME_START, this.onGameStart, this);
+        eventEmitter.off(EVENT.GAME_START, this.onGameStart, this);
     }
 
     private onGameStart = () => {
