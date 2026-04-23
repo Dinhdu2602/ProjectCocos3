@@ -8,7 +8,7 @@ export class PlayerSystem extends Component {
     @property(Node)
     playerNode: Node = null!;
 
-    private speed: number = 200;
+    private speed: number = 300;
 
     private direction: Vec3 = new Vec3(0, 0, 0);
 
