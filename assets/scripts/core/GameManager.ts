@@ -1,6 +1,6 @@
 import { _decorator, Component } from 'cc';
 import { GameState } from './GameState';
-import EventManager from './EventManager';
+import EventEmitter from '../core/EventEmitter';
 import { EVENT } from '../constants/EventKey';
 
 const { ccclass } = _decorator;
@@ -14,11 +14,15 @@ export default class GameManager extends Component {
         this.registerEvents();
         this.changeState(GameState.LOBBY);
     }
-
+    
+    start() {
+        (window as any).game = this;
+        (window as any).event = EventEmitter;
+    }
     private registerEvents() {
-        EventManager.instance.on(EVENT.GAME_START, this.onGameStart, this);
-        EventManager.instance.on(EVENT.GAME_OVER, this.onGameOver, this);
-        EventManager.instance.on(EVENT.EXIT_TO_LOBBY, this.onExit, this);
+        EventEmitter.on(EVENT.GAME_START, this.onGameStart, this);
+        EventEmitter.on(EVENT.GAME_OVER, this.onGameOver, this);
+        EventEmitter.on(EVENT.EXIT_TO_LOBBY, this.onExit, this);
     }
 
     private changeState(state: GameState) {
@@ -27,6 +31,7 @@ export default class GameManager extends Component {
     }
 
     private onGameStart = () => {
+        console.log("GAME START TRIGGERED");
         this.changeState(GameState.PLAYING);
     }
 
@@ -38,7 +43,7 @@ export default class GameManager extends Component {
         this.changeState(GameState.EXIT);
 
         // reset toàn bộ game
-        EventManager.instance.emit(EVENT.RESET_GAME);
+        EventEmitter.emit(EVENT.RESET_GAME);
 
         // quay về lobby
         this.changeState(GameState.LOBBY);

@@ -21,7 +21,7 @@
     "_active": true,
     "_components": [],
     "_prefab": {
-      "__id__": 102
+      "__id__": 103
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -52,7 +52,7 @@
     },
     "autoReleaseAssets": false,
     "_globals": {
-      "__id__": 105
+      "__id__": 106
     },
     "_id": "4fc6aedd-88ed-48dc-9d6c-a1dd91ed9944"
   },
@@ -74,13 +74,13 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 99
-      },
-      {
         "__id__": 100
       },
       {
         "__id__": 101
+      },
+      {
+        "__id__": 102
       }
     ],
     "_prefab": null,
@@ -219,6 +219,9 @@
     "_components": [
       {
         "__id__": 98
+      },
+      {
+        "__id__": 99
       }
     ],
     "_prefab": null,
@@ -313,7 +316,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "CharacterLayer",
+    "_name": "PlayerLayer",
     "_objFlags": 0,
     "_parent": {
       "__id__": 6
@@ -3369,6 +3372,17 @@
     "_id": "baKXYOOktIPYCehRvCeJEZ"
   },
   {
+    "__type__": "3b4b9PGNdFHR6k46FKKEfgr",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 5
+    },
+    "_enabled": true,
+    "__prefab": null,
+    "_id": "42U+u92HpD0L+7fkX/MFq5"
+  },
+  {
     "__type__": "cc.UITransform",
     "_name": "",
     "_objFlags": 0,
@@ -3441,7 +3455,7 @@
     "instance": null,
     "targetOverrides": [
       {
-        "__id__": 103
+        "__id__": 104
       }
     ],
     "nestedPrefabInstanceRoots": [
@@ -3463,7 +3477,7 @@
       "__id__": 8
     },
     "targetInfo": {
-      "__id__": 104
+      "__id__": 105
     }
   },
   {
@@ -3475,22 +3489,22 @@
   {
     "__type__": "cc.SceneGlobals",
     "ambient": {
-      "__id__": 106
-    },
-    "shadows": {
       "__id__": 107
     },
-    "_skybox": {
+    "shadows": {
       "__id__": 108
     },
-    "fog": {
+    "_skybox": {
       "__id__": 109
     },
-    "octree": {
+    "fog": {
       "__id__": 110
     },
-    "lightProbeInfo": {
+    "octree": {
       "__id__": 111
+    },
+    "lightProbeInfo": {
+      "__id__": 112
     },
     "bakedWithStationaryMainLight": false,
     "bakedWithHighpLightmap": false

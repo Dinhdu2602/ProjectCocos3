@@ -1,4 +1,6 @@
-import { _decorator, Component, Node, input, Input, EventKeyboard, KeyCode, Vec3 } from 'cc';
+import { _decorator, Component, Node, input, Input, EventKeyboard, KeyCode, Vec3 } from 'cc'
+import { EVENT }  from '../constants/EventKey';
+import EventEmitter from '../core/EventEmitter';
 
 const { ccclass, property } = _decorator;
 
@@ -8,18 +10,27 @@ export class PlayerSystem extends Component {
     @property(Node)
     playerNode: Node = null!;
 
+    private canMove: boolean = false;
+
     private moveSpeed: number = 300;
 
     private inputDirection: Vec3 = new Vec3();
 
     onLoad() {
+        console.log("PLAYER LOAD");
         this.registerInput(); 
+        EventEmitter.on(EVENT.GAME_START, this.onGameStart, this);
     }
 
     onDestroy() {
         this.unregisterInput();
+        EventEmitter.off(EVENT.GAME_START, this.onGameStart, this);
     }
 
+    private onGameStart = () => {
+    console.log("PLAYER RECEIVED EVENT");
+    this.canMove = true;
+    }
     update(deltaTime: number) {
         this.handleMovement(deltaTime);
     }
@@ -62,6 +73,7 @@ export class PlayerSystem extends Component {
 
     //========== MOVEMENT ========
     private handleMovement(deltaTime: number) {
+        if (!this.canMove) return;
         if (this.inputDirection.length() === 0) return;
 
         const direction = this.inputDirection.clone().normalize();
