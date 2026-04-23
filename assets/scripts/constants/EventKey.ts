@@ -8,4 +8,7 @@ export const EVENT = {
     RESET_GAME: "RESET_GAME",
 
     TIME_UP: "TIME_UP", 
+
+    ENEMY_SPAWN: "ENEMY_SPAWN",
+    SCORE_UPDATE: "SCORE_UPDATE",
 } 

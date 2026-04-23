@@ -1,6 +1,6 @@
 import { _decorator, Component, Node, input, Input, EventKeyboard, KeyCode, Vec3 } from 'cc'
-import { EVENT }  from '../constants/EventKey';
-import { eventEmitter } from '../core/EventEmitter';
+import { EVENT }  from '../../constants/EventKey';
+import { eventEmitter } from '../../core/EventEmitter';
 
 const { ccclass, property } = _decorator;
 

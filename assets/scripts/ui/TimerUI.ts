@@ -1,5 +1,5 @@
 import { _decorator, Component, Label } from 'cc';
-import { TimerSystem } from '../systems/TimerSystem';
+import { TimerSystem } from '../ecs/systems/TimerSystem';
 
 const { ccclass, property } = _decorator;
 

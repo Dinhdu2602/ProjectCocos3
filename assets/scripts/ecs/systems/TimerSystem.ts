@@ -1,6 +1,6 @@
 import { _decorator, Component, Node } from 'cc';
-import { eventEmitter} from '../core/EventEmitter';
-import { EVENT } from '../constants/EventKey';
+import { eventEmitter} from '../../core/EventEmitter';
+import { EVENT } from '../../constants/EventKey';
 const { ccclass, property } = _decorator;
 
 @ccclass('TimerSystem')
