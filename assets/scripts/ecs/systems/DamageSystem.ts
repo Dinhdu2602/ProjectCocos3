@@ -1,23 +1,33 @@
-import { _decorator, Component } from 'cc';
-import { ECSWorld } from '../core/ECSWorld';
-import { EnemyComponent } from '../components/EnemyComponent';
-import { eventEmitter} from '../../core/EventEmitter';
-import { EVENT } from '../../constants/EventKey';
+import { _decorator, Component } from "cc";
+import { ECSWorld } from "../core/ECSWorld";
+import { EnemyComponent } from "../components/EnemyComponent";
+import { eventEmitter } from "../../core/EventEmitter";
 
 const { ccclass } = _decorator;
 
-@ccclass('DamageSystem')
+@ccclass("DamageSystem")
 export class DamageSystem extends Component {
+  update(dt: number) {
+    ECSWorld.instance.enemies.forEach((node) => {
+      if (!node || !node.isValid) return;
 
-    update() {
-        ECSWorld.instance.enemies.forEach(e => {
-            const enemy = e.getComponent(EnemyComponent);
-            if (!enemy) return;
+      const enemy = node.getComponent(EnemyComponent);
 
-            if (enemy.hp <= 0) {
-                eventEmitter.emit(EVENT.ENEMY_DIE, { score: 10 });
-                e.destroy();
-            }
-        });
-    }
+      if (!enemy) return;
+
+      enemy.hp -= dt * 5;
+
+      if (enemy.hp <= 0) {
+        console.log("Enemy Die");
+
+        eventEmitter.emit("ENEMY_DIE", { score: 10 });
+
+        node.destroy();
+      }
+    });
+
+    ECSWorld.instance.enemies = ECSWorld.instance.enemies.filter(
+      (e) => e && e.isValid,
+    );
+  }
 }

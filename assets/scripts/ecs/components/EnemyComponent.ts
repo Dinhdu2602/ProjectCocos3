@@ -9,7 +9,7 @@ export class EnemyComponent extends Component {
 
     type: EnemyType = EnemyType.CHASER;
 
-    hp: number = 0;
+    hp: number = 10;
     speed: number = 0;
     damage: number = 0;
     attackRange: number = 0;

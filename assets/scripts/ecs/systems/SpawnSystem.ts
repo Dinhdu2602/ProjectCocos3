@@ -26,19 +26,6 @@ export class SpawnSystem extends Component {
         console.log("SpawnSystem running");
     }
 
-    // spawnEnemy() {
-    //     const enemy = instantiate(this.enemyPrefab);
-
-    //     enemy.setPosition(new Vec3(
-    //         Math.random()*800-400,
-    //         Math.random()*600-300,
-    //         0
-    //     ));
-
-    //     this.enemyLayer.addChild(enemy); 
-
-    //     ECSWorld.instance.enemies.push(enemy);
-    // }
     spawnEnemy() {
     const enemy = new Node("Enemy");
 
@@ -55,6 +42,7 @@ export class SpawnSystem extends Component {
     ECSWorld.instance.enemies.push(enemy);
     console.log("Spawn OK");
     console.log("Enemy count:", ECSWorld.instance.enemies.length);
+    this.timer = 0;
 }
 
 }
