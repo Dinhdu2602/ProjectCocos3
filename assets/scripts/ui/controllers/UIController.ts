@@ -31,8 +31,12 @@ export class UIController extends Component {
   }
 
   private onGameOver() {
-    this.showLobby();
-  }
+    console.log("UIController: Game Over");
+
+    if (this.hudUI) {
+        this.hudUI.active = false;
+    }
+}
 
   private showHUD() {
     if (!this.lobbyUI || !this.hudUI) return;

@@ -26,6 +26,10 @@ export class PlayerSystem extends Component {
         eventEmitter.off(EVENT.GAME_START, this.onGameStart, this);
     }
 
+    private onReset() {
+        console.log("Player RESET");
+        this.node.setPosition(0, 0, 0);
+    }
     private onGameStart = () => {
     console.log("PLAYER RECEIVED EVENT");
     this.canMove = true;

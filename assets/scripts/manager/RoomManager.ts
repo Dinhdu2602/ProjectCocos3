@@ -6,7 +6,6 @@ import { EnemySystem } from "../ecs/systems/EnemySystem";
 import { BulletSystem } from "../ecs/systems/BulletSystem";
 import { GameState } from "../core/GameState";
 
-
 const { ccclass, property } = _decorator;
 
 @ccclass("RoomManager")
@@ -33,6 +32,7 @@ export class RoomManager extends Component {
 
   registerEvent() {
     eventEmitter.on(EVENT.TIME_UP, this.onTimeUp, this);
+    eventEmitter.on(EVENT.RESET_GAME, this.onResetGame, this);
   }
 
   private onTimeUp = () => {
@@ -42,8 +42,16 @@ export class RoomManager extends Component {
     this.changeState(GameState.RESULT);
   };
 
+  onResetGame() {
+    console.log(">>> RESET GAME");
+    
+    //reset state
+    this.changeState(GameState.PLAYING);
+  }
 
   changeState(state: GameState) {
+    if (this.currentState === state) return; //Loop
+
     this.currentState = state;
 
     console.log("[Room] Change State:", state);
@@ -51,10 +59,16 @@ export class RoomManager extends Component {
     switch (state) {
       case GameState.PLAYING:
         this.enableGameplay();
+        eventEmitter.emit(EVENT.GAME_START);
         break;
 
       case GameState.RESULT:
         this.disableGameplay();
+
+        console.log(">>> EMIT GAME_OVER"); // debug
+
+        eventEmitter.emit(EVENT.GAME_OVER);
+
         break;
     }
   }
@@ -69,7 +83,7 @@ export class RoomManager extends Component {
     console.log(">>> DISABLE GAMEPLAY");
     console.log("SpawnSystem ref:", this.spawnSystem);
 
-
     this.spawnSystem.enabled = false;
   }
+
 }

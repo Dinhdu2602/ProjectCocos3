@@ -1,6 +1,8 @@
 import { _decorator, Component, Prefab, instantiate, Vec3, Node } from "cc";
 import { ECSWorld } from "../core/ECSWorld";
 import { EnemyComponent } from "../components/EnemyComponent";
+import { eventEmitter } from "../../core/EventEmitter";
+import { EVENT } from "../../constants/EventKey";
 
 const { ccclass, property } = _decorator;
 
@@ -14,7 +16,23 @@ export class SpawnSystem extends Component {
 
   private timer = 0;
   private interval = 2;
+  
+  onLoad() {
+    eventEmitter.on(EVENT.RESET_GAME, this.onReset, this);
+  }
 
+  onDestroy() {
+    eventEmitter.off(EVENT.RESET_GAME, this.onReset, this);
+  } 
+
+  private onReset() {
+    console.log(">>> spawn RESET");
+
+    this.timer = 0;
+    this.enemyLayer.removeAllChildren();
+
+    ECSWorld.instance.enemies = [];
+  }
   onEnable() {
     console.log("SpawnSystem ENABLED");
   }
