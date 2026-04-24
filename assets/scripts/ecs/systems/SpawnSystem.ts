@@ -25,16 +25,20 @@ export class SpawnSystem extends Component {
     eventEmitter.off(EVENT.RESET_GAME, this.onReset, this);
   } 
 
-  private onReset() {
-    console.log(">>> spawn RESET");
+   private onReset() {
+  console.log(">>> spawn RESET");
 
-    this.timer = 0;
-    this.enemyLayer.removeAllChildren();
+  this.timer = 0;
 
-    ECSWorld.instance.enemies = [];
-  }
+  ECSWorld.instance.enemies.forEach(e => {
+    if (e && e.isValid) e.destroy();
+  });
+
+  ECSWorld.instance.enemies = [];
+}
   onEnable() {
     console.log("SpawnSystem ENABLED");
+    this.timer = 0;
   }
 
   onDisable() {
@@ -64,6 +68,5 @@ export class SpawnSystem extends Component {
     ECSWorld.instance.enemies.push(enemy);
     console.log("Spawn OK");
     console.log("Enemy count:", ECSWorld.instance.enemies.length);
-    this.timer = 0;
   }
 }

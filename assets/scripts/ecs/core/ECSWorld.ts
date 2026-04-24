@@ -10,4 +10,5 @@ export class ECSWorld {
 
     enemies: Node[] = [];
     bullets: Node[] = [];
+    player: Node | null = null;
 }

@@ -4,6 +4,7 @@ export const EVENT = {
     EXIT_TO_LOBBY: "EXIT_TO_LOBBY",
 
     PLAYER_HIT: "PLAYER_HIT",
+    PLAYER_DIE: "PLAYER_DIE",
     ENEMY_DIE: "ENEMY_DIE",
     RESET_GAME: "RESET_GAME",
 

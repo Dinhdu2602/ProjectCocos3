@@ -4,7 +4,10 @@ import { EVENT } from "../constants/EventKey";
 import { SpawnSystem } from "../ecs/systems/SpawnSystem";
 import { EnemySystem } from "../ecs/systems/EnemySystem";
 import { BulletSystem } from "../ecs/systems/BulletSystem";
+import { CollisionSystem } from "../ecs/systems/CollisionSystem";
+import { DamageSystem } from "../ecs/systems/DamageSystem";
 import { GameState } from "../core/GameState";
+import { ECSWorld } from "../ecs/core/ECSWorld";
 
 const { ccclass, property } = _decorator;
 
@@ -19,6 +22,12 @@ export class RoomManager extends Component {
   @property(BulletSystem)
   bulletSystem: BulletSystem = null!;
 
+  @property(CollisionSystem)
+  collisionSystem: CollisionSystem = null!;
+
+  @property(DamageSystem)
+  damageSystem: DamageSystem = null!;
+  
   private currentState: GameState = GameState.LOBBY;
 
   onLoad() {
@@ -55,7 +64,6 @@ export class RoomManager extends Component {
     this.currentState = state;
 
     console.log("[Room] Change State:", state);
-
     switch (state) {
       case GameState.PLAYING:
         this.enableGameplay();
