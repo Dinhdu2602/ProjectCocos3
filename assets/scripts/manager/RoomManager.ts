@@ -1,11 +1,27 @@
-import { _decorator, Component } from "cc";
+import { _decorator, Component, Game } from "cc";
 import { eventEmitter } from "../core/EventEmitter";
 import { EVENT } from "../constants/EventKey";
+import { SpawnSystem } from "../ecs/systems/SpawnSystem";
+import { EnemySystem } from "../ecs/systems/EnemySystem";
+import { BulletSystem } from "../ecs/systems/BulletSystem";
+import { GameState } from "../core/GameState";
 
-const { ccclass } = _decorator;
+
+const { ccclass, property } = _decorator;
 
 @ccclass("RoomManager")
 export class RoomManager extends Component {
+  @property(SpawnSystem)
+  spawnSystem: SpawnSystem = null!;
+
+  @property(EnemySystem)
+  enemySystem: EnemySystem = null!;
+
+  @property(BulletSystem)
+  bulletSystem: BulletSystem = null!;
+
+  private currentState: GameState = GameState.LOBBY;
+
   onLoad() {
     console.log("Room Manager loaded");
     this.registerEvent();
@@ -23,16 +39,37 @@ export class RoomManager extends Component {
     console.log("[Room] Time Up");
 
     eventEmitter.emit(EVENT.GAME_OVER);
-    this.changeState("RESULT");
+    this.changeState(GameState.RESULT);
   };
 
-  private changeState(state: string) {
+
+  changeState(state: GameState) {
+    this.currentState = state;
+
     console.log("[Room] Change State:", state);
 
-    if (state === "RESULT") {
-      setTimeout(() => {
-        eventEmitter.clear(); 
-      }, 0);
+    switch (state) {
+      case GameState.PLAYING:
+        this.enableGameplay();
+        break;
+
+      case GameState.RESULT:
+        this.disableGameplay();
+        break;
     }
+  }
+
+  enableGameplay() {
+    console.log(">>> ENABLE GAMEPLAY");
+
+    this.spawnSystem.enabled = true;
+  }
+
+  disableGameplay() {
+    console.log(">>> DISABLE GAMEPLAY");
+    console.log("SpawnSystem ref:", this.spawnSystem);
+
+
+    this.spawnSystem.enabled = false;
   }
 }

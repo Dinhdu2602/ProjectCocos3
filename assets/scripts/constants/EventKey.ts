@@ -11,4 +11,4 @@ export const EVENT = {
 
     ENEMY_SPAWN: "ENEMY_SPAWN",
     SCORE_UPDATE: "SCORE_UPDATE",
-} 
+} as const;
