@@ -14,6 +14,11 @@ export class ScoreSystem extends Component {
         eventEmitter.on(EVENT.RESET_GAME, this.onReset, this);
     }
 
+    onDestroy() {
+    eventEmitter.off(EVENT.ENEMY_DIE, this.onEnemyDie, this);
+    eventEmitter.off(EVENT.RESET_GAME, this.onReset, this);
+}
+
     onReset() {
         console.log("Score RESET");
         this.score = 0;

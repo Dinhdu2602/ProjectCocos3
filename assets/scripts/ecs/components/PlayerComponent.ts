@@ -10,21 +10,20 @@ export class PlayerComponent extends Component {
 
     maxHP: number = 100;
     currentHP: number = 100;
+    private isDead: boolean = false;    
 
     onEnable() {
         ECSWorld.instance.player = this.node;
         console.log("Player registered");
-    }
-
-    onLoad() {  
         eventEmitter.on(EVENT.RESET_GAME, this.onReset, this);
     }
 
-    onDestroy() {
+    onDisable() {
         eventEmitter.off(EVENT.RESET_GAME, this.onReset, this);
     }
 
     takeDamage(amount: number) {
+        if (this.isDead) return;
         this.currentHP -= amount;
 
         if (this.currentHP < 0) this.currentHP = 0;
@@ -34,6 +33,7 @@ export class PlayerComponent extends Component {
         eventEmitter.emit(EVENT.PLAYER_HIT, this.currentHP);
 
         if (this.currentHP <= 0) {
+            this.isDead = true;
             console.log(">>> PLAYER DIE");
             eventEmitter.emit(EVENT.PLAYER_DIE);
         }
@@ -43,6 +43,7 @@ export class PlayerComponent extends Component {
         console.log("Player RESET");
 
         this.currentHP = this.maxHP;
+        this.isDead = false;
         ECSWorld.instance.player = this.node;
         eventEmitter.emit(EVENT.PLAYER_HIT, this.currentHP);
     }

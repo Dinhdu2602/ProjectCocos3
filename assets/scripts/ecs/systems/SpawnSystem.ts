@@ -1,8 +1,12 @@
+
+
 import { _decorator, Component, Prefab, instantiate, Vec3, Node } from "cc";
 import { ECSWorld } from "../core/ECSWorld";
 import { EnemyComponent } from "../components/EnemyComponent";
 import { eventEmitter } from "../../core/EventEmitter";
 import { EVENT } from "../../constants/EventKey";
+import GameManager from "../../core/GameManager";
+import { GameState } from "../../core/GameState";
 
 const { ccclass, property } = _decorator;
 
@@ -25,7 +29,7 @@ export class SpawnSystem extends Component {
     eventEmitter.off(EVENT.RESET_GAME, this.onReset, this);
   } 
 
-   private onReset() {
+   onReset() {
   console.log(">>> spawn RESET");
 
   this.timer = 0;
@@ -46,7 +50,7 @@ export class SpawnSystem extends Component {
   }
 
   update(dt: number) {
-    //console.log("SpawnSystem running");
+    if (GameManager.instance.state !== GameState.PLAYING) return;
     this.timer += dt;
 
     if (this.timer >= this.interval) {
@@ -61,12 +65,21 @@ export class SpawnSystem extends Component {
 
     const comp = enemy.addComponent(EnemyComponent);
     //console.log("EnemyComponent: ", comp);
-
+    comp.hp = 100;
     enemy.setPosition(Math.random() * 800 - 400, Math.random() * 600 - 300, 0);
 
     this.enemyLayer.addChild(enemy);
     ECSWorld.instance.enemies.push(enemy);
     console.log("Spawn OK");
     console.log("Enemy count:", ECSWorld.instance.enemies.length);
+
+    setTimeout(() => {
+        if (!enemy || !enemy.isValid) return;
+         if (GameManager.instance.state !== GameState.PLAYING) return;
+
+        console.log("FAKE KILL ENEMY");
+
+        comp.hp = 0;
+    }, 5000);
   }
 }

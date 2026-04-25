@@ -1,52 +1,71 @@
-import { _decorator, Component, Vec3} from 'cc';
-import { ECSWorld } from '../core/ECSWorld';
-import { BulletComponent } from '../components/BulletComponent';
-import { EnemyComponent } from '../components/EnemyComponent';
-import { PlayerComponent } from '../components/PlayerComponent';
+import { _decorator, Component, Vec3, Node } from "cc";
+import { ECSWorld } from "../core/ECSWorld";
+import { BulletComponent } from "../components/BulletComponent";
+import { EnemyComponent } from "../components/EnemyComponent";
+import { PlayerComponent } from "../components/PlayerComponent";
+import { GameState } from "../../core/GameState";
+import GameManager from "../../core/GameManager";
 
 const { ccclass } = _decorator;
 
-@ccclass('CollisionSystem')
+@ccclass("CollisionSystem")
 export class CollisionSystem extends Component {
+  private hitCooldown: Map<Node, number> = new Map();
+  private readonly HIT_DELAY = 500;
 
-    update() {
-        const { bullets, enemies, player } = ECSWorld.instance;
+  onEnable() {
+    console.log("CollisionSystem ENABLED");
+    this.hitCooldown.clear();
+  }
 
-        bullets.forEach(b => {
-            const bullet = b.getComponent(BulletComponent);
-            if (!bullet) return;
+  onDisable() {
+    console.log("CollisionSystem DISABLED");
+    this.hitCooldown.clear();
+  }
+  update() {
+    if (GameManager.instance.state !== GameState.PLAYING) return;
+    const now = Date.now();
+    const { bullets, enemies, player } = ECSWorld.instance;
 
-            enemies.forEach(e => {
-                const enemy = e.getComponent(EnemyComponent);
-                if (!enemy) return;
+    bullets.forEach((b) => {
+      const bullet = b.getComponent(BulletComponent);
+      if (!bullet) return;
 
-                if (this.hit(b, e)) {
-                    enemy.hp -= bullet.damage;
+      enemies.forEach((e) => {
+        const enemy = e.getComponent(EnemyComponent);
+        if (!enemy) return;
 
-                    b.destroy();
-                }
-            });
-        });
+        if (this.hit(b, e)) {
+          enemy.hp -= bullet.damage;
 
-        if (!player || !player.isValid) return;
+          b.destroy();
+        }
+      });
+    });
 
-        const playerComponent = player.getComponent(PlayerComponent);
-        if (!playerComponent) return;
+    if (!player || !player.isValid) return;
 
-        enemies.forEach(e => {
-            if (!e || !e.isValid) return;
+    const playerComponent = player.getComponent(PlayerComponent);
+    if (!playerComponent) return;
 
-            if (this.hit(e, player)) {
-                console.log("HIT PLAYER");
-                playerComponent.takeDamage(50);
-                console.log("CALL TAKE DAMAGE");
+    enemies.forEach((e) => {
+      if (!e || !e.isValid) return;
 
-                //e.destroy();
-            }
-        });
-    }
+      if (!this.hit(e, player)) return;
 
-  hit(a:any, b:any){
+      const lastHit = this.hitCooldown.get(e) || 0;
+
+      if (now - lastHit < this.HIT_DELAY) return;
+
+      console.log("HIT PLAYER");
+
+      playerComponent.takeDamage(50);
+
+      this.hitCooldown.set(e, now);
+    });
+  }
+
+  hit(a: any, b: any) {
     return Vec3.distance(a.worldPosition, b.worldPosition) < 50;
-} 
+  }
 }
