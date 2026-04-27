@@ -6,37 +6,39 @@ const { ccclass, property } = _decorator;
 
 @ccclass("ResultPopup")
 export class ResultPopup extends Component {
-
-    onLoad() {
+  onLoad() {
     console.log("ResultPopup LOADED");
+
+    eventEmitter.on(EVENT.GAME_OVER, this.show, this);
+    eventEmitter.on(EVENT.RESET_GAME, this.hide, this);
+  }
+
+  onDestroy() {
+    eventEmitter.off(EVENT.GAME_OVER, this.show, this);
+    eventEmitter.off(EVENT.RESET_GAME, this.hide, this);
+  }
+
+  show() {
+    console.log(">>> SHOW RESULT POPUP");
+    this.node.active = true;
+    const parent = this.node.parent;
+    if (parent) {
+      this.node.setSiblingIndex(parent.children.length - 1);
+    }
+  }
+
+  hide() {
+    console.log(">>> HIDE RESULT POPUP");
     this.node.active = false;
+  }
 
-    eventEmitter.on(EVENT.GAME_OVER, () => {
-        console.log(">>> RECEIVED GAME_OVER");
-        this.show();
-        this
-    });
-    }
+  onClickReplay() {
+    console.log(">>> CLICK REPLAY");
 
-    onDestroy() {
-        eventEmitter.off(EVENT.GAME_OVER, this.show, this);
-        eventEmitter.off(EVENT.RESET_GAME, this.hide, this);
-    }
+    eventEmitter.emit(EVENT.EXIT_TO_LOBBY);
 
-    show() {
-        console.log(">>> SHOW RESULT POPUP");
-        this.node.setSiblingIndex(999);
-        this.node.active = true;
-    }
-
-    hide() {
-        console.log(">>> HIDE RESULT POPUP");
-        this.node.active = false;
-    }
-
-    onClickReplay() {
-        console.log(">>> CLICK REPLAY");
-        eventEmitter.emit(EVENT.RESET_GAME);
-        this.node.active = false;
-    }
+    setTimeout(() => {
+      eventEmitter.emit(EVENT.GAME_START);
+    }, 0);
+  }
 }

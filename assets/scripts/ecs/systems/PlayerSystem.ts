@@ -19,16 +19,18 @@ export class PlayerSystem extends Component {
     onLoad() {
         this.registerInput(); 
         eventEmitter.on(EVENT.GAME_START, this.onGameStart, this);
+        eventEmitter.on(EVENT.RESET_GAME, this.onReset, this);
     }
 
     onDestroy() {
         this.unregisterInput();
         eventEmitter.off(EVENT.GAME_START, this.onGameStart, this);
+        eventEmitter.off(EVENT.RESET_GAME, this.onReset, this); 
     }
 
     private onReset() {
         console.log("Player RESET");
-        this.node.setPosition(0, 0, 0);
+        this.playerNode.setPosition(0, 0, 0);
     }
     private onGameStart = () => {
     console.log("PLAYER RECEIVED EVENT");

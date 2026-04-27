@@ -16,27 +16,26 @@ export class TimerSystem extends Component {
   }
 
   onDestroy() {
-    eventEmitter.off(EVENT.GAME_START, this.onGameStart, this);
+    // eventEmitter.off(EVENT.GAME_START, this.onGameStart, this);
     eventEmitter.off(EVENT.RESET_GAME, this.onResetGame, this);
   }
 
   registerEvent() {
-    eventEmitter.on(EVENT.GAME_START, this.onGameStart, this);
+    // eventEmitter.on(EVENT.GAME_START, this.onGameStart, this);
     eventEmitter.on(EVENT.RESET_GAME, this.onResetGame, this);
   }
 
-  private onGameStart = () => {
-    console.log(">>> TIMER START");
-    this.currentTime = this.duration;
-    this.isRunning = true;
-  };
+  // private onGameStart = () => {
+  //   console.log(">>> TIMER START");
+  //   this.currentTime = this.duration;
+  //   this.isRunning = true;
+  // };
 
   private onResetGame = () => {
-    console.log(">>> TIMER RESET");
-
+     console.log(">>> TIMER RESET & START");
     this.currentTime = this.duration;
     this.isRunning = true;
-  };
+};
 
   update(dt: number) {
     if (!this.isRunning) return;

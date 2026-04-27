@@ -11,6 +11,9 @@ export class UIController extends Component {
   @property(Node)
   hudUI: Node = null;
 
+  @property(Node)
+  resultUI: Node = null;
+
   onLoad() {
     this.registerEvent();
     this.showLobby();
@@ -34,19 +37,33 @@ export class UIController extends Component {
     console.log("UIController: Game Over");
 
     if (this.hudUI) {
-        this.hudUI.active = false;
+      this.hudUI.active = false;
     }
-}
+
+    if (this.resultUI) {
+      this.resultUI.active = true;
+
+      const parent = this.resultUI.parent;
+      if (parent) {
+        this.resultUI.setSiblingIndex(parent.children.length - 1);
+      }
+    }
+  }
 
   private showHUD() {
-    if (!this.lobbyUI || !this.hudUI) return;
+    if (!this.lobbyUI || !this.hudUI || !this.resultUI) return;
 
     this.lobbyUI.active = false;
     this.hudUI.active = true;
+    this.resultUI.active = false;
   }
 
   private showLobby() {
     this.lobbyUI.active = true;
     this.hudUI.active = false;
+
+    if (this.resultUI) {
+      this.resultUI.active = false;
+    }
   }
 }

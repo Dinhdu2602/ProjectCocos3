@@ -22,6 +22,7 @@ export class SpawnSystem extends Component {
   private interval = 2;
   
   onLoad() {
+    this.enabled = false;
     eventEmitter.on(EVENT.RESET_GAME, this.onReset, this);
   }
 
@@ -57,7 +58,6 @@ export class SpawnSystem extends Component {
       this.spawnEnemy();
       this.timer = 0;
     }
-    console.log("SpawnSystem running");
   }
 
   spawnEnemy() {
