@@ -1,24 +1,46 @@
-import { _decorator, Component, Vec3 } from "cc";
-import { ECSWorld } from "../core/ECSWorld";
+import { _decorator, Component, Node, Prefab, instantiate, Vec3 } from "cc";
+import { eventEmitter } from "../../core/EventEmitter";
+import { EVENT } from "../../constants/EventKey";
+import { BulletType } from "../../types/BulletType";
 import { BulletComponent } from "../components/BulletComponent";
-import GameManager from "../../core/GameManager";
-import { GameState } from "../../core/GameState";
 
-const { ccclass } = _decorator;
+
+const { ccclass, property } = _decorator;
 
 @ccclass("BulletSystem")
 export class BulletSystem extends Component {
-  update(dt: number) {
-    if (GameManager.instance.state !== GameState.PLAYING) return;
 
-    ECSWorld.instance.bullets.forEach((node) => {
-      const bullet = node.getComponent(BulletComponent);
-      if (!bullet) return;
+    @property(Prefab)
+    bulletPrefab: Prefab = null!;
+    @property(Node)
+    bulletLayer: Node = null!;
 
-      const move = new Vec3();
-      Vec3.multiplyScalar(move, bullet.direction, bullet.speed * dt);
+    onLoad() {
+        eventEmitter.on(EVENT.PLAYER_SHOOT, this.onShoot, this);
+    }
 
-      node.setPosition(node.position.add(move));
-    });
-  }
+    onDestroy() {
+        eventEmitter.off(EVENT.PLAYER_SHOOT, this.onShoot, this);
+    }
+     private onShoot(pos: Vec3) {
+
+        if (!this.bulletPrefab || !this.bulletLayer) {
+            console.error(" BulletSystem not get prefab or layer");
+            return;
+        }
+
+        const bullet = instantiate(this.bulletPrefab);
+        this.bulletLayer.addChild(bullet);
+
+        bullet.setWorldPosition(pos);
+
+        const comp = bullet.getComponent(BulletComponent);
+
+        if (!comp) {
+            console.error("Bullet prefab miss BulletComponent");
+            return;
+        }
+
+        comp.init(BulletType.NORMAL, new Vec3(1, 0, 0));
+    }
 }

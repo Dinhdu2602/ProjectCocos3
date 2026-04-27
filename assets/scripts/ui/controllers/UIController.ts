@@ -14,6 +14,9 @@ export class UIController extends Component {
   @property(Node)
   resultUI: Node = null;
 
+  @property(Node)
+  gameLayer: Node = null;
+
   onLoad() {
     this.registerEvent();
     this.showLobby();
@@ -48,6 +51,10 @@ export class UIController extends Component {
         this.resultUI.setSiblingIndex(parent.children.length - 1);
       }
     }
+
+    if (this.gameLayer) {
+    this.gameLayer.active = false;
+  }
   }
 
   private showHUD() {
@@ -56,6 +63,9 @@ export class UIController extends Component {
     this.lobbyUI.active = false;
     this.hudUI.active = true;
     this.resultUI.active = false;
+    if (this.gameLayer) {
+    this.gameLayer.active = true;
+  }
   }
 
   private showLobby() {
@@ -64,6 +74,9 @@ export class UIController extends Component {
 
     if (this.resultUI) {
       this.resultUI.active = false;
+    }
+    if (this.gameLayer) {
+      this.gameLayer.active = false;
     }
   }
 }

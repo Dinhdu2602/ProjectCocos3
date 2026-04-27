@@ -12,6 +12,7 @@ export class PlayerComponent extends Component {
     currentHP: number = 100;
     private isDead: boolean = false;    
 
+    
     onEnable() {
         ECSWorld.instance.player = this.node;
         console.log("Player registered");
@@ -21,6 +22,11 @@ export class PlayerComponent extends Component {
     onDisable() {
         eventEmitter.off(EVENT.RESET_GAME, this.onReset, this);
     }
+
+    start() {
+  console.log("Player active:", this.node.active);
+  console.log("World pos:", this.node.worldPosition);
+}
 
     takeDamage(amount: number) {
         if (this.isDead) return;

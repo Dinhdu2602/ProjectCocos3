@@ -5,5 +5,42 @@
       "width": 1560,
       "height": 720
     }
+  },
+  "custom_joint_texture_layouts": [],
+  "layer": [
+    {
+      "name": "Player",
+      "value": 1
+    },
+    {
+      "name": "Enemy",
+      "value": 2
+    },
+    {
+      "name": "Bullet",
+      "value": 4
+    }
+  ],
+  "physics": {
+    "collisionGroups": [
+      {
+        "index": 1,
+        "name": "Player"
+      },
+      {
+        "index": 2,
+        "name": "Enemy"
+      },
+      {
+        "index": 3,
+        "name": "Bullet"
+      }
+    ],
+    "collisionMatrix": {
+      "0": 1,
+      "1": 4,
+      "2": 10,
+      "3": 4
+    }
   }
 }

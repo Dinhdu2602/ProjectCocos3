@@ -16,18 +16,25 @@ export class BulletComponent extends Component {
     pierceCount: number = 0;
     explosionRadius: number = 0;
 
-    onLoad() {
-        const config = BulletConfig[this.type];
+    public init(type: BulletType, direction: Vec3) {
+
+        this.type = type;
+
+        // normalize direction
+        this.direction.set(direction.x, direction.y, 0).normalize();
+
+        const config = BulletConfig[type];
 
         this.damage = config.damage;
         this.speed = config.speed;
+        this.pierceCount = config.pierceCount ?? 0;
+        this.explosionRadius = config.explosionRadius ?? 0;
+    }
 
-        if (config.pierceCount) {
-            this.pierceCount = config.pierceCount;
-        }
+    update(dt: number) {
+        if (this.direction.length() === 0) return;
 
-        if (config.explosionRadius) {
-            this.explosionRadius = config.explosionRadius;
-        }
+        const move = this.direction.clone().multiplyScalar(this.speed * dt);
+        this.node.setPosition(this.node.position.clone().add(move));
     }
 }
