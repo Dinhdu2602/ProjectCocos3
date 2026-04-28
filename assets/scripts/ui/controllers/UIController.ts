@@ -9,27 +9,43 @@ export class UIController extends Component {
   lobbyUI: Node = null!;
 
   @property(Node)
-  hudUI: Node = null;
+  hudUI: Node = null!;
 
   @property(Node)
-  resultUI: Node = null;
+  resultUI: Node = null!;
 
   @property(Node)
-  gameLayer: Node = null;
+  gameLayer: Node = null!;
+
+  @property(Node)
+  pausePopup: Node = null!;
+
+  @property(Node)
+  settingPopup: Node = null!;
 
   onLoad() {
     this.registerEvent();
     this.showLobby();
   }
 
-  onDestroy() {
-    eventEmitter.off(EVENT.GAME_START, this.onGameStart, this);
-    eventEmitter.off(EVENT.GAME_OVER, this.onGameOver, this);
-  }
-
   private registerEvent() {
     eventEmitter.on(EVENT.GAME_START, this.onGameStart, this);
     eventEmitter.on(EVENT.GAME_OVER, this.onGameOver, this);
+
+    eventEmitter.on(EVENT.GAME_PAUSE, this.showPause, this);
+    eventEmitter.on(EVENT.GAME_RESUME, this.hidePause, this);
+    eventEmitter.on(EVENT.OPEN_SETTING, this.openSetting, this);
+    eventEmitter.on(EVENT.CLOSE_SETTING, this.closeSetting, this);
+  }
+
+  onDestroy() {
+    eventEmitter.off(EVENT.GAME_START, this.onGameStart, this);
+    eventEmitter.off(EVENT.GAME_OVER, this.onGameOver, this);
+
+    eventEmitter.off(EVENT.GAME_PAUSE, this.showPause, this);
+    eventEmitter.off(EVENT.GAME_RESUME, this.hidePause, this);
+    eventEmitter.off(EVENT.OPEN_SETTING, this.openSetting, this);
+    eventEmitter.off(EVENT.CLOSE_SETTING, this.closeSetting, this);
   }
 
   private onGameStart() {
@@ -53,8 +69,8 @@ export class UIController extends Component {
     }
 
     if (this.gameLayer) {
-    this.gameLayer.active = false;
-  }
+      this.gameLayer.active = false;
+    }
   }
 
   private showHUD() {
@@ -64,8 +80,8 @@ export class UIController extends Component {
     this.hudUI.active = true;
     this.resultUI.active = false;
     if (this.gameLayer) {
-    this.gameLayer.active = true;
-  }
+      this.gameLayer.active = true;
+    }
   }
 
   private showLobby() {
@@ -77,6 +93,41 @@ export class UIController extends Component {
     }
     if (this.gameLayer) {
       this.gameLayer.active = false;
+    }
+
+    if (this.pausePopup) this.pausePopup.active = false;
+    if (this.settingPopup) this.settingPopup.active = false;
+  }
+
+  // ========================
+  // PAUSE UI
+  // ========================
+
+  private showPause() {
+    if (this.pausePopup) {
+      this.pausePopup.active = true;
+    }
+  }
+
+  private hidePause() {
+    if (this.pausePopup) {
+      this.pausePopup.active = false;
+    }
+  }
+
+  // ========================
+  // SETTING UI
+  // ========================
+
+  private openSetting() {
+    if (this.settingPopup) {
+      this.settingPopup.active = true;
+    }
+  }
+
+  private closeSetting() {
+    if (this.settingPopup) {
+      this.settingPopup.active = false;
     }
   }
 }

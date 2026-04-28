@@ -1,5 +1,5 @@
 import { _decorator, Component, Button } from 'cc';
-import  { eventEmitter}  from '../../core/EventEmitter';
+import { eventEmitter } from '../../core/EventEmitter';
 import { EVENT } from '../../constants/EventKey';
 
 const { ccclass, property } = _decorator;
@@ -12,12 +12,9 @@ export class StartButton extends Component {
 
     private isClicked = false;
 
-    start() {
-        this.button.node.on(Button.EventType.CLICK, this.onClickStart, this);
-    }
-    
     onLoad() {
         console.log("[UI] Start Button loaded");
+        this.button.node.on(Button.EventType.CLICK, this.onClickStart, this);
     }
 
     onDestroy() {
@@ -25,11 +22,11 @@ export class StartButton extends Component {
     }
 
     private onClickStart() {
-        if (this.isClicked) return; 
+        if (this.isClicked) return;
+
         this.isClicked = true;
         console.log("[UI] Click Start");
 
         eventEmitter.emit(EVENT.GAME_START);
-        this.node.active = false; 
     }
 }

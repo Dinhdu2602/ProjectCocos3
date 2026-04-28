@@ -24,7 +24,7 @@ export class EnemyCollision extends Component {
         const now = Date.now();
         if (now - this.lastHitTime < this.HIT_DELAY) return;
 
-        console.log("⚡ ENEMY HIT PLAYER");
+        console.log("ENEMY HIT PLAYER");
 
         // DAMAGE
         player.takeDamage(enemy.damage);

@@ -20,15 +20,15 @@ export class BulletCollision extends Component {
 
         const bullet = this.getComponent(BulletComponent);
 
-        console.log("💥 BULLET HIT ENEMY");
+        console.log(" BULLET HIT ENEMY");
 
-        // Gửi damage (giữ nguyên hệ ECS của bạn)
+       
         eventEmitter.emit(EVENT.ENEMY_HIT, {
             enemy,
             damage: bullet.damage,
         });
 
-        // Xoá bullet
+        
         this.node.destroy();
     }
 }

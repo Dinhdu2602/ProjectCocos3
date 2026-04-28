@@ -41,7 +41,7 @@ export class EnemySystem extends Component {
       }
 
       // =========================
-      // 2. DISTANCE CHECK (QUAN TRỌNG NHẤT)
+      // 2. DISTANCE CHECK 
       // =========================
       const dist = Vec3.distance(pos, playerPos);
 
@@ -49,7 +49,6 @@ export class EnemySystem extends Component {
       const speed = Math.min(enemy.speed, 80);
 
       if (dist < minDistance) {
-        // di chuyển nhẹ sang ngang thay vì đứng im
         this._move.set(-this._dir.y * speed * dt, this._dir.x * speed * dt, 0);
 
         node.setWorldPosition(

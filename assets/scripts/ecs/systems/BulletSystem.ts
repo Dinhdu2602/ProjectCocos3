@@ -36,7 +36,7 @@ export class BulletSystem extends Component {
       const comp = bullet.getComponent(BulletComponent);
       if (!comp) continue;
 
-      // 🔥 STRAIGHT MOVEMENT ONLY
+      // STRAIGHT MOVEMENT ONLY
       this._move.set(
         comp.direction.x * comp.speed * dt,
         comp.direction.y * comp.speed * dt,

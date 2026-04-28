@@ -1,4 +1,4 @@
-import { _decorator, Component } from "cc";
+import { _decorator, Component, director} from "cc";
 import { GameState } from "./GameState";
 import { eventEmitter } from "../core/EventEmitter";
 import { EVENT } from "../constants/EventKey";
@@ -19,12 +19,18 @@ export default class GameManager extends Component {
     eventEmitter.on(EVENT.GAME_START, this.onGameStart, this);
     eventEmitter.on(EVENT.GAME_OVER, this.onGameOver, this);
     eventEmitter.on(EVENT.EXIT_TO_LOBBY, this.onExit, this);
+
+    eventEmitter.on(EVENT.GAME_PAUSE, this.onPause, this);
+    eventEmitter.on(EVENT.GAME_RESUME, this.onResume, this);
   }
 
   onDisable() {
     eventEmitter.off(EVENT.GAME_START, this.onGameStart, this);
     eventEmitter.off(EVENT.GAME_OVER, this.onGameOver, this);
     eventEmitter.off(EVENT.EXIT_TO_LOBBY, this.onExit, this);
+
+    eventEmitter.off(EVENT.GAME_PAUSE, this.onPause, this);
+    eventEmitter.off(EVENT.GAME_RESUME, this.onResume, this);
   }
   onLoad() {
     if (GameManager.instance) {
@@ -57,9 +63,11 @@ export default class GameManager extends Component {
     eventEmitter.emit(EVENT.RESET_GAME);
 
     this.changeState(GameState.PLAYING);
+    director.resume();
   };
   private onGameOver = () => {
     this.changeState(GameState.RESULT);
+    director.pause();
   };
 
   private onExit = () => {
@@ -68,5 +76,24 @@ export default class GameManager extends Component {
     eventEmitter.emit(EVENT.RESET_GAME);
 
     this.changeState(GameState.LOBBY);
+    director.resume();
+  };
+
+  private onPause = () => {
+    if (this.currentState !== GameState.PLAYING) return;
+
+    this.changeState(GameState.PAUSE);
+    director.pause();
+
+    console.log("GAME PAUSE");
+  };
+
+  private onResume = () => {
+    if (this.currentState !== GameState.PAUSE) return;
+
+    this.changeState(GameState.PLAYING);
+    director.resume();
+
+    console.log("GAME RESUME");
   };
 }
