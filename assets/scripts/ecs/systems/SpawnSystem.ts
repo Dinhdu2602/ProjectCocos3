@@ -9,6 +9,7 @@ import {
 
 import { ECSWorld } from "../core/ECSWorld";
 import { EnemyComponent } from "../components/EnemyComponent";
+import { EnemyType } from "../../types/EnemyType";
 import { eventEmitter } from "../../core/EventEmitter";
 import { EVENT } from "../../constants/EventKey";
 import GameManager from "../../core/GameManager";
@@ -19,8 +20,8 @@ const { ccclass, property } = _decorator;
 @ccclass("SpawnSystem")
 export class SpawnSystem extends Component {
 
-  @property(Prefab)
-  enemyPrefab: Prefab = null!;
+  @property([Prefab])
+  enemyPrefabs: Prefab[] = [];
 
   @property(Node)
   enemyLayer: Node = null!;
@@ -39,24 +40,17 @@ export class SpawnSystem extends Component {
   }
 
   onReset() {
-    console.log(">>> spawn RESET");
-
     this.timer = 0;
 
     ECSWorld.instance.enemies.forEach(e => {
-      if (e && e.isValid) e.destroy();
+      if (e) e.destroy();
     });
 
     ECSWorld.instance.enemies = [];
   }
 
   onEnable() {
-    console.log("SpawnSystem ENABLED");
     this.timer = 0;
-  }
-
-  onDisable() {
-    console.log("SpawnSystem DISABLED");
   }
 
   update(dt: number) {
@@ -71,33 +65,34 @@ export class SpawnSystem extends Component {
   }
 
   spawnEnemy() {
-
     if (ECSWorld.instance.enemies.length >= this.maxEnemy) return;
 
-    const enemy = instantiate(this.enemyPrefab);
+    // random type
+    const type = Math.floor(Math.random() * this.enemyPrefabs.length);
+    const prefab = this.enemyPrefabs[type];
+
+    if (!prefab) return;
+
+    const enemy = instantiate(prefab);
     enemy.setParent(this.enemyLayer);
+
     const size = view.getVisibleSize();
     const halfW = size.width / 2;
     const halfH = size.height / 2;
+
     const x = halfW + 20;
-    const y = Math.random() * size.height - halfH;
+    const y = (Math.random() - 0.5) * halfH;
 
     enemy.setPosition(x, y, 0);
     enemy.active = true;
 
-    // =========================
-    // init enemy HP
-    // =========================
     const comp = enemy.getComponent(EnemyComponent);
     if (comp) {
-      comp.hp = 100;
-      comp.maxHp = 100;
-      comp.isDead = false;
+      comp.init(type);
     }
 
     ECSWorld.instance.enemies.push(enemy);
 
-    console.log("Spawn OK");
-    console.log("Enemy count:", ECSWorld.instance.enemies.length);
+    console.log("Spawn:", EnemyType[type]);
   }
 }

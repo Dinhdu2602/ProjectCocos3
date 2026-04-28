@@ -5,6 +5,7 @@ import { eventEmitter } from "../../core/EventEmitter";
 import { EVENT } from "../../constants/EventKey";
 import { GameState } from "../../core/GameState";
 import GameManager from "../../core/GameManager";
+import { EnemyConfig } from "../config/EnemyConfig";
 
 const { ccclass } = _decorator;
 
@@ -18,6 +19,7 @@ export class DamageSystem extends Component {
   onDestroy() {
     eventEmitter.off(EVENT.ENEMY_HIT, this.onEnemyHit, this);
   }
+
 
   onEnemyHit(data: { enemy: EnemyComponent; damage: number }) {
     const enemy = data.enemy;
@@ -41,7 +43,7 @@ export class DamageSystem extends Component {
     }
 
     // =========================
-    // 3. DAMAGE LABEL (SAFE)
+    // 3. DAMAGE LABEL
     // =========================
     if (enemy.damageLabel?.node?.isValid) {
       enemy.damageLabel.string = `-${damage}`;
@@ -55,14 +57,16 @@ export class DamageSystem extends Component {
     }
 
     // =========================
-    // 4. DEATH CHECK (IMPORTANT)
+    // 4. DIE
     // =========================
     if (enemy.hp <= 0 && !enemy.isDead) {
       enemy.isDead = true;
 
       console.log("Enemy Die");
 
-      eventEmitter.emit(EVENT.ENEMY_DIE, { score: 10 });
+      const score = EnemyConfig[enemy.type].score;
+
+      eventEmitter.emit(EVENT.ENEMY_DIE, { score });
 
       // remove ECS
       const list = ECSWorld.instance.enemies;

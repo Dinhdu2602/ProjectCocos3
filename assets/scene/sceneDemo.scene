@@ -1930,6 +1930,8 @@
     },
     "_enabled": true,
     "__prefab": null,
+    "hpBar": null,
+    "damageLabel": null,
     "_id": "8cX9ABcCFNiJ00fflECYBG"
   },
   {
@@ -6657,7 +6659,7 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "duration": 20,
+    "duration": 60,
     "_id": "5dmT77WHNKhKP7LyXw/ims"
   },
   {
@@ -6809,10 +6811,20 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "enemyPrefab": {
-      "__uuid__": "b299bf7b-0f80-4f1f-90d9-d5fb498d7436",
-      "__expectedType__": "cc.Prefab"
-    },
+    "enemyPrefabs": [
+      {
+        "__uuid__": "5aadf933-e101-4245-8154-341c716714dd",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "19ed5ccb-7000-42e4-a8e1-b44d0713d947",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "b299bf7b-0f80-4f1f-90d9-d5fb498d7436",
+        "__expectedType__": "cc.Prefab"
+      }
+    ],
     "enemyLayer": {
       "__id__": 19
     },
