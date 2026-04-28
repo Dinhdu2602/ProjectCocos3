@@ -15,10 +15,8 @@ export class BulletSystem extends Component {
   @property(Node)
   bulletLayer: Node = null!;
 
-  private _targetPos = new Vec3();
-  private _currentPos = new Vec3();
   private _move = new Vec3();
-  private _desiredDir = new Vec3();
+  private _currentPos = new Vec3();
 
   onLoad() {
     eventEmitter.on(EVENT.PLAYER_SHOOT, this.onShoot, this);
@@ -38,25 +36,7 @@ export class BulletSystem extends Component {
       const comp = bullet.getComponent(BulletComponent);
       if (!comp) continue;
 
-      // =========================
-      // SOFT TRACKING
-      // =========================
-      if (comp.target && isValid(comp.target)) {
-        comp.target.getWorldPosition(this._targetPos);
-        bullet.getWorldPosition(this._currentPos);
-
-        Vec3.subtract(this._desiredDir, this._targetPos, this._currentPos);
-        Vec3.normalize(this._desiredDir, this._desiredDir);
-
-        Vec3.lerp(comp.direction, comp.direction, this._desiredDir, 0.2);
-        Vec3.normalize(comp.direction, comp.direction);
-      }
-
-      // =========================
-      // MOVE
-      // =========================
-      if (comp.direction.lengthSqr() === 0) continue;
-
+      // 🔥 STRAIGHT MOVEMENT ONLY
       this._move.set(
         comp.direction.x * comp.speed * dt,
         comp.direction.y * comp.speed * dt,
@@ -80,7 +60,7 @@ export class BulletSystem extends Component {
     if (enemies.length === 0) return;
 
     // =========================
-    // FIND NEAREST
+    // FIND NEAREST ENEMY
     // =========================
     let nearest = enemies[0];
     let nearestPos = new Vec3();
@@ -104,10 +84,13 @@ export class BulletSystem extends Component {
     }
 
     // =========================
-    // DIRECTION
+    // FIXED DIRECTION
     // =========================
     const dir = new Vec3();
     Vec3.subtract(dir, nearestPos, pos);
+
+    if (dir.lengthSqr() === 0) return; // tránh NaN
+
     Vec3.normalize(dir, dir);
 
     // =========================
@@ -122,7 +105,8 @@ export class BulletSystem extends Component {
 
     comp.init(BulletType.NORMAL, dir);
 
-    comp.target = nearest;
+    
+    comp.target = null;
 
     ECSWorld.instance.bullets.push(bullet);
   }

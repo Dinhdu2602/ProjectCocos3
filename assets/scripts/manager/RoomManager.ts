@@ -4,7 +4,6 @@ import { EVENT } from "../constants/EventKey";
 import { SpawnSystem } from "../ecs/systems/SpawnSystem";
 import { EnemySystem } from "../ecs/systems/EnemySystem";
 import { BulletSystem } from "../ecs/systems/BulletSystem";
-import { CollisionSystem } from "../ecs/systems/CollisionSystem";
 import { DamageSystem } from "../ecs/systems/DamageSystem";
 
 const { ccclass, property } = _decorator;
@@ -21,8 +20,6 @@ export class RoomManager extends Component {
   @property(BulletSystem)
   bulletSystem: BulletSystem = null!;
 
-  @property(CollisionSystem)
-  collisionSystem: CollisionSystem = null!;
 
   @property(DamageSystem)
   damageSystem: DamageSystem = null!;

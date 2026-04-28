@@ -1,4 +1,4 @@
-import { _decorator, Component, ProgressBar, Label } from "cc";
+import { _decorator, Component, ProgressBar, Label, Vec3 } from "cc";
 import { EnemyType } from "../../types/EnemyType";
 import { EnemyConfig } from "../config/EnemyConfig";
 
@@ -28,6 +28,11 @@ export class EnemyComponent extends Component {
 
     private _lastHp = -1;
 
+    // =========================
+    // knockback system
+    // =========================
+    private velocity: Vec3 = new Vec3();
+
     init(type: EnemyType) {
         this.type = type;
 
@@ -43,34 +48,69 @@ export class EnemyComponent extends Component {
         this.isDead = false;
         this._lastHp = -1;
 
-        // init UI
+        this.velocity.set(0, 0, 0);
+
         if (this.damageLabel) {
             this.damageLabel.string = this.damage.toString();
         }
     }
 
-    takeDamage(amount: number) {
+    update(dt: number) {
         if (this.isDead) return;
 
-        this.hp -= amount;
+        // =========================
+        // 🔥 APPLY KNOCKBACK MOVE
+        // =========================
+        if (this.velocity.length() > 0.01) {
 
-        if (this.hp <= 0) {
-            this.hp = 0;
-            this.isDead = true;
-            this.node.destroy();
+            const pos = this.node.worldPosition;
+
+            this.node.setWorldPosition(
+                pos.x + this.velocity.x * dt,
+                pos.y + this.velocity.y * dt,
+                pos.z
+            );
+
+            // friction
+            this.velocity.multiplyScalar(0.85);
+
+            if (this.velocity.length() < 1) {
+                this.velocity.set(0, 0, 0);
+            }
         }
-    }
 
-    update() {
-        if (this.isDead) return;
-
-        // chỉ update khi HP thay đổi
+        // =========================
+        // HP UI update
+        // =========================
         if (this.hp !== this._lastHp) {
             this._lastHp = this.hp;
 
             if (this.hpBar) {
                 this.hpBar.progress = this.hp / this.maxHp;
             }
+        }
+    }
+
+    takeDamage(amount: number, hitDir?: Vec3) {
+        if (this.isDead) return;
+
+        this.hp -= amount;
+
+        // =========================
+        // 💥 KNOCKBACK ON HIT
+        // =========================
+        if (hitDir) {
+            const MAX_FORCE = 180;
+
+            this.velocity.x = hitDir.x * MAX_FORCE;
+            this.velocity.y = hitDir.y * MAX_FORCE;
+        }
+
+        if (this.hp <= 0) {
+            this.hp = 0;
+            this.isDead = true;
+
+            this.node.destroy();
         }
     }
 }
