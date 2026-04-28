@@ -1,5 +1,7 @@
-import { _decorator, Component, Vec2, Vec3, sp, Node } from "cc";
+import { _decorator, Component, Vec2, Vec3, sp, Node, Prefab } from "cc";
+import { ECSWorld } from "../ecs/core/ECSWorld";
 const { ccclass, property } = _decorator;
+
 
 @ccclass("PlayerController")
 export class PlayerController extends Component {
@@ -12,6 +14,9 @@ export class PlayerController extends Component {
 
   @property({ type: Node })
   shootPoint: Node = null!;
+
+  @property({ type: Prefab})
+  bulletPrefab: Prefab = null!; 
 
   // ===== STATE =====
   private _velocity: Vec2 = new Vec2();

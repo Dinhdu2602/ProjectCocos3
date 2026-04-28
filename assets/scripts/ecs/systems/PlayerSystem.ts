@@ -37,6 +37,7 @@ export class PlayerSystem extends Component {
 
   private lastShootTime: number = 0;
   private attackRate: number = 0.3;
+  private lastDirection: Vec3 = new Vec3(1, 0, 0);
 
   start() {
     this.startPosition = this.playerNode.worldPosition.clone();
@@ -111,9 +112,15 @@ export class PlayerSystem extends Component {
   //========== MOVEMENT ========
   private handleMovement(deltaTime: number) {
     if (!this.canMove) return;
-    if (this.inputDirection.length() === 0) {
+    if (this.inputDirection.lengthSqr() === 0) {
       this.playerController.stopMove();
       return;
+    }
+
+    if (this.inputDirection.length() > 0) {
+      this.lastDirection
+        .set(this.inputDirection.x, this.inputDirection.y, 0)
+        .normalize();
     }
 
     const direction = this.inputDirection.clone().normalize();
@@ -134,6 +141,8 @@ export class PlayerSystem extends Component {
 
     const pos = this.playerController.getShootPoint();
 
-    eventEmitter.emit(EVENT.PLAYER_SHOOT, pos);
+    eventEmitter.emit(EVENT.PLAYER_SHOOT, {
+      pos,
+    });
   }
 }

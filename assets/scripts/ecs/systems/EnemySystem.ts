@@ -1,14 +1,64 @@
-import { _decorator, Component, Node } from 'cc';
-const { ccclass, property } = _decorator;
+import { _decorator, Component, Vec3, view } from "cc";
+import { ECSWorld } from "../core/ECSWorld";
+import { EnemyComponent } from "../components/EnemyComponent";
+import { GameState } from "../../core/GameState";
+import GameManager from "../../core/GameManager";
 
-@ccclass('EnemySystem')
+const { ccclass } = _decorator;
+
+@ccclass("EnemySystem")
 export class EnemySystem extends Component {
-    start() {
+    private _dir = new Vec3();
+    private _move = new Vec3();
 
-    }
+    update(dt: number) {
+        if (GameManager.instance.state !== GameState.PLAYING) return;
 
-    update(deltaTime: number) {
-        
+        const world = ECSWorld.instance;
+        const player = world.player;
+        if (!player || !player.isValid) return;
+
+        const playerPos = player.worldPosition;
+
+        world.enemies.forEach((node) => {
+            if (!node || !node.isValid) return;
+
+            const enemy = node.getComponent(EnemyComponent);
+            if (!enemy || enemy.isDead) return;
+
+            const pos = node.getWorldPosition();
+
+            
+            const ENTRY_X = 250; 
+            if (pos.x > ENTRY_X) {
+                const speed = enemy.speed || 80;
+
+                node.setWorldPosition(
+                    pos.x - speed * dt,
+                    pos.y,
+                    pos.z
+                );
+
+                return; // chưa chase player
+            }
+
+           
+            Vec3.subtract(this._dir, playerPos, pos);
+            Vec3.normalize(this._dir, this._dir);
+
+            const speed = Math.min(enemy.speed, 80);
+
+            this._move.set(
+                this._dir.x * speed * dt,
+                this._dir.y * speed * dt,
+                0
+            );
+
+            node.setWorldPosition(
+                pos.x + this._move.x,
+                pos.y + this._move.y,
+                pos.z
+            );
+        });
     }
 }
-

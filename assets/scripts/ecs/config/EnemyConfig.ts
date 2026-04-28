@@ -9,21 +9,21 @@ export type EnemyConfigType = {
 
 export const EnemyConfig: Record<EnemyType, EnemyConfigType> = {
     [EnemyType.CHASER]: {
-        hp: 10,
-        speed: 120,
+        hp: 50, 
+        speed: 40,
         damage: 5,
     },
 
     [EnemyType.RANGER]: {
-        hp: 8,
-        speed: 80,
+        hp: 35,
+        speed: 30,
         damage: 3,
         attackRange: 250,
     },
 
     [EnemyType.KAMIKAZE]: {
-        hp: 5,
-        speed: 200,
+        hp: 25,
+        speed: 70,
         damage: 10,
     }
 };

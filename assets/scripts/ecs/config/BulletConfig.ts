@@ -10,7 +10,7 @@ export type BulletConfigType = {
 export const BulletConfig: Record<BulletType, BulletConfigType> = {
     [BulletType.NORMAL]: {
         speed: 300,
-        damage: 5,
+        damage: 15,
     },
 
     [BulletType.PIERCE]: {
