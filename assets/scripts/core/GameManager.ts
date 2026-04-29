@@ -61,9 +61,10 @@ export default class GameManager extends Component {
     console.log("GAME START TRIGGERED");
 
     eventEmitter.emit(EVENT.RESET_GAME);
-
     this.changeState(GameState.PLAYING);
     director.resume();
+    
+    eventEmitter.emit(EVENT.GAME_START);
   };
   private onGameOver = () => {
     this.changeState(GameState.RESULT);
@@ -71,12 +72,13 @@ export default class GameManager extends Component {
   };
 
   private onExit = () => {
-    this.changeState(GameState.EXIT);
-
+    //this.changeState(GameState.EXIT);
+    console.log("EXIT TO LOBBY");
+    director.resume();
     eventEmitter.emit(EVENT.RESET_GAME);
 
     this.changeState(GameState.LOBBY);
-    director.resume();
+    
   };
 
   private onPause = () => {

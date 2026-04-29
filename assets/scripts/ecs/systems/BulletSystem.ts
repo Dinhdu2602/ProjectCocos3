@@ -4,6 +4,8 @@ import { EVENT } from "../../constants/EventKey";
 import { BulletType } from "../../types/BulletType";
 import { BulletComponent } from "../components/BulletComponent";
 import { ECSWorld } from "../core/ECSWorld";
+import GameManager from "../../core/GameManager";
+import { GameState } from "../../core/GameState";
 
 const { ccclass, property } = _decorator;
 
@@ -27,6 +29,7 @@ export class BulletSystem extends Component {
   }
 
   update(dt: number) {
+    if (GameManager.instance.state !== GameState.PLAYING) return;
     const bullets = ECSWorld.instance.bullets;
 
     for (let i = bullets.length - 1; i >= 0; i--) {

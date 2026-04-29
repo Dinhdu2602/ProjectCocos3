@@ -36,6 +36,7 @@ export class UIController extends Component {
     eventEmitter.on(EVENT.GAME_RESUME, this.hidePause, this);
     eventEmitter.on(EVENT.OPEN_SETTING, this.openSetting, this);
     eventEmitter.on(EVENT.CLOSE_SETTING, this.closeSetting, this);
+    eventEmitter.on(EVENT.EXIT_TO_LOBBY, this.onExitLobby, this);
   }
 
   onDestroy() {
@@ -46,6 +47,7 @@ export class UIController extends Component {
     eventEmitter.off(EVENT.GAME_RESUME, this.hidePause, this);
     eventEmitter.off(EVENT.OPEN_SETTING, this.openSetting, this);
     eventEmitter.off(EVENT.CLOSE_SETTING, this.closeSetting, this);
+    eventEmitter.off(EVENT.EXIT_TO_LOBBY, this.onExitLobby, this);
   }
 
   private onGameStart() {
@@ -85,19 +87,23 @@ export class UIController extends Component {
   }
 
   private showLobby() {
-    this.lobbyUI.active = true;
-    this.hudUI.active = false;
+  console.log(">>> SHOW LOBBY");
 
-    if (this.resultUI) {
-      this.resultUI.active = false;
-    }
-    if (this.gameLayer) {
-      this.gameLayer.active = false;
-    }
+  this.lobbyUI.active = true;
+  this.hudUI.active = false;
 
-    if (this.pausePopup) this.pausePopup.active = false;
-    if (this.settingPopup) this.settingPopup.active = false;
+  if (this.resultUI) {
+    this.resultUI.active = false;
+    this.resultUI.setSiblingIndex(0);
   }
+
+  if (this.gameLayer) this.gameLayer.active = false;
+
+  if (this.pausePopup) this.pausePopup.active = false;
+  if (this.settingPopup) this.settingPopup.active = false;
+
+  this.lobbyUI.setSiblingIndex(999);
+}
 
   // ========================
   // PAUSE UI
@@ -130,4 +136,19 @@ export class UIController extends Component {
       this.settingPopup.active = false;
     }
   }
+  
+  private onExitLobby() {
+  console.log("UI: Back to Lobby");
+
+  this.showLobby();
+  if (this.pausePopup) {
+    this.pausePopup.active = false;
+    this.pausePopup.setSiblingIndex(0);
+  }
+
+  if (this.settingPopup) {
+    this.settingPopup.active = false;
+    this.settingPopup.setSiblingIndex(0);
+  }
+}
 }

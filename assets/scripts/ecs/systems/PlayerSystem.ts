@@ -12,6 +12,8 @@ import {
 import { EVENT } from "../../constants/EventKey";
 import { eventEmitter } from "../../core/EventEmitter";
 import { PlayerController } from "../../controllers/PlayerController";
+import { GameState } from "../../core/GameState";
+import GameManager from '../../core/GameManager';
 
 const { ccclass, property } = _decorator;
 
@@ -68,6 +70,7 @@ export class PlayerSystem extends Component {
     this.canMove = true;
   };
   update(deltaTime: number) {
+    if (GameManager.instance.state !== GameState.PLAYING) return;
     this.updateDirectionFromKey();
     this.handleMovement(deltaTime);
   }

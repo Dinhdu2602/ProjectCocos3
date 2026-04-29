@@ -1,6 +1,8 @@
 import { _decorator, Component, Node } from "cc";
 import { eventEmitter } from "../../core/EventEmitter";
 import { EVENT } from "../../constants/EventKey";
+import { GameState } from "../../core/GameState";
+import GameManager from "../../core/GameManager";
 const { ccclass, property } = _decorator;
 
 @ccclass("TimerSystem")
@@ -16,28 +18,30 @@ export class TimerSystem extends Component {
   }
 
   onDestroy() {
-    // eventEmitter.off(EVENT.GAME_START, this.onGameStart, this);
+    eventEmitter.off(EVENT.GAME_START, this.onGameStart, this);
     eventEmitter.off(EVENT.RESET_GAME, this.onResetGame, this);
   }
 
   registerEvent() {
-    // eventEmitter.on(EVENT.GAME_START, this.onGameStart, this);
+    eventEmitter.on(EVENT.GAME_START, this.onGameStart, this);
     eventEmitter.on(EVENT.RESET_GAME, this.onResetGame, this);
   }
 
-  // private onGameStart = () => {
-  //   console.log(">>> TIMER START");
-  //   this.currentTime = this.duration;
-  //   this.isRunning = true;
-  // };
+  private onGameStart = () => {
+    console.log(">>> TIMER START");
 
-  private onResetGame = () => {
-     console.log(">>> TIMER RESET & START");
     this.currentTime = this.duration;
     this.isRunning = true;
-};
+  };
+
+  private onResetGame = () => {
+    console.log(">>> TIMER RESET");
+    this.currentTime = this.duration;
+    this.isRunning = false;
+  };
 
   update(dt: number) {
+    if (GameManager.instance.state !== GameState.PLAYING) return;
     if (!this.isRunning) return;
 
     this.currentTime -= dt;

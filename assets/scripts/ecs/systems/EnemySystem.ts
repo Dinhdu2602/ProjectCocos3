@@ -29,7 +29,7 @@ export class EnemySystem extends Component {
       const pos = node.getWorldPosition();
 
       // =========================
-      // 1. ENTRY (spawn từ ngoài)
+      // 1. ENTRY
       // =========================
       const ENTRY_X = 250;
 
