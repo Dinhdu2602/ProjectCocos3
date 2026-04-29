@@ -1,6 +1,7 @@
 import { _decorator, Component } from 'cc';
 import { eventEmitter } from '../../core/EventEmitter';
 import { EVENT } from '../../constants/EventKey';
+import AudioManager from '../../manager/AudioManager';
 
 const { ccclass } = _decorator;
 
@@ -26,6 +27,7 @@ export class ScoreSystem extends Component {
     } 
     onEnemyDie(data: any) {
         this.score += data.score;
+        AudioManager.instance.playCoin();
         console.log("Score:", this.score);
 
         eventEmitter.emit(EVENT.SCORE_UPDATE, this.score);

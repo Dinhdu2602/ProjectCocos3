@@ -2,6 +2,7 @@ import { _decorator, Component, director} from "cc";
 import { GameState } from "./GameState";
 import { eventEmitter } from "../core/EventEmitter";
 import { EVENT } from "../constants/EventKey";
+import AudioManager from "../manager/AudioManager";
 
 const { ccclass } = _decorator;
 
@@ -40,11 +41,15 @@ export default class GameManager extends Component {
     }
     GameManager.instance = this;
     this.changeState(GameState.LOBBY);
+   
   }
 
   start() {
     (window as any).game = this;
     (window as any).event = eventEmitter;
+     this.scheduleOnce(() => {
+        AudioManager.instance.playBGM();
+    }, 0);
   }
 
   private changeState(state: GameState) {
@@ -65,6 +70,7 @@ export default class GameManager extends Component {
     director.resume();
     
     eventEmitter.emit(EVENT.GAME_START);
+    AudioManager.instance.playBGM();
   };
   private onGameOver = () => {
     this.changeState(GameState.RESULT);

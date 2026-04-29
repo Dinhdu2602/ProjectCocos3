@@ -6,6 +6,7 @@ import { EVENT } from "../../constants/EventKey";
 import { GameState } from "../../core/GameState";
 import GameManager from "../../core/GameManager";
 import { EnemyConfig } from "../config/EnemyConfig";
+import AudioManager from "../../manager/AudioManager";
 
 const { ccclass } = _decorator;
 
