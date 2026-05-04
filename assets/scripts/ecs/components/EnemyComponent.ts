@@ -59,7 +59,7 @@ export class EnemyComponent extends Component {
         if (this.isDead) return;
 
         // =========================
-        // 🔥 APPLY KNOCKBACK MOVE
+        // APPLY KNOCKBACK MOVE
         // =========================
         if (this.velocity.length() > 0.01) {
 
@@ -97,7 +97,7 @@ export class EnemyComponent extends Component {
         this.hp -= amount;
 
         // =========================
-        // 💥 KNOCKBACK ON HIT
+        // KNOCKBACK ON HIT
         // =========================
         if (hitDir) {
             const MAX_FORCE = 180;
