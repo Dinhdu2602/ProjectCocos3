@@ -29,7 +29,7 @@ export class EnemyComponent extends Component {
     private _lastHp = -1;
 
     // =========================
-    // knockback system
+    // KNOCKBACK SYSTEM
     // =========================
     private velocity: Vec3 = new Vec3();
 

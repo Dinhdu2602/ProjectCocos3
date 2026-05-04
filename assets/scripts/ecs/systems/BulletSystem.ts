@@ -92,7 +92,7 @@ export class BulletSystem extends Component {
     const dir = new Vec3();
     Vec3.subtract(dir, nearestPos, pos);
 
-    if (dir.lengthSqr() === 0) return; // tránh NaN
+    if (dir.lengthSqr() === 0) return;
 
     Vec3.normalize(dir, dir);
 

@@ -2,10 +2,8 @@ import { _decorator, Component, Vec2, Vec3, sp, Node, Prefab } from "cc";
 import { ECSWorld } from "../ecs/core/ECSWorld";
 const { ccclass, property } = _decorator;
 
-
 @ccclass("PlayerController")
 export class PlayerController extends Component {
-
   @property
   speed: number = 200;
 
@@ -15,8 +13,8 @@ export class PlayerController extends Component {
   @property({ type: Node })
   shootPoint: Node = null!;
 
-  @property({ type: Prefab})
-  bulletPrefab: Prefab = null!; 
+  @property({ type: Prefab })
+  bulletPrefab: Prefab = null!;
 
   // ===== STATE =====
   private _velocity: Vec2 = new Vec2();
@@ -41,17 +39,17 @@ export class PlayerController extends Component {
     this.animation.setMix("shoot", "walk", 0.05);
 
     this.animation.setCompleteListener((trackEntry) => {
-    const name = trackEntry.animation?.name;
+      const name = trackEntry.animation?.name;
 
-    if (name === "portal") {
-      this._isSpawning = false;
-      this.playIdle();
-    }
+      if (name === "portal") {
+        this._isSpawning = false;
+        this.playIdle();
+      }
 
-    if (name === "shoot") {
-      this._isShooting = false;
-    }
-  });
+      if (name === "shoot") {
+        this._isShooting = false;
+      }
+    });
   }
 
   start() {
@@ -72,19 +70,19 @@ export class PlayerController extends Component {
   // SPAWN
   // =======================
 
- private playSpawnAnimation() {
-  this._isSpawning = true;
+  private playSpawnAnimation() {
+    this._isSpawning = true;
 
-  this.animation.setAnimation(0, "portal", false);
+    this.animation.setAnimation(0, "portal", false);
 
-  setTimeout(() => {
-    if (this._isSpawning) {
-      console.warn("FORCE END SPAWN");
-      this._isSpawning = false;
-      this.playIdle();
-    }
-  }, 2000); 
-}
+    setTimeout(() => {
+      if (this._isSpawning) {
+        console.warn("FORCE END SPAWN");
+        this._isSpawning = false;
+        this.playIdle();
+      }
+    }, 2000);
+  }
 
   private playIdle() {
     this.animation.setAnimation(0, "idle", true);
@@ -151,8 +149,6 @@ export class PlayerController extends Component {
     this._isShooting = true;
 
     this.animation.setAnimation(1, "shoot", false);
-
-    
   }
 
   public getShootPoint(): Vec3 {
