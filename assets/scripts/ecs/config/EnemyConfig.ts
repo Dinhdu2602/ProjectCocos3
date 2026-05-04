@@ -13,7 +13,7 @@ export const EnemyConfig: Record<EnemyType, EnemyConfigType> = {
         hp: 50, 
         speed: 40,
         damage: 5,
-        score: 10.
+        score: 10,
     },
 
     [EnemyType.RANGER]: {
