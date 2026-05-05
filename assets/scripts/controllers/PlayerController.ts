@@ -19,8 +19,8 @@ export class PlayerController extends Component {
   // ===== STATE =====
   private _velocity: Vec2 = new Vec2();
   private _targetDirection: Vec2 = new Vec2();
-
-  private _isShooting: boolean = false;
+  private _isShooting: boolean = true;
+  private RUN_THRESHOLD = 0.8;
   private _isSpawning: boolean = true;
 
   private _currentAnim: string = "";
@@ -63,6 +63,7 @@ export class PlayerController extends Component {
     if (this._isSpawning) return;
 
     this.handleMovement(dt);
+    this.updateFacing();
     this.updateAnimation();
   }
 
@@ -107,7 +108,7 @@ export class PlayerController extends Component {
       return;
     }
 
-    this._velocity.set(this._targetDirection.x, this._targetDirection.y);
+    this._velocity.set(this._targetDirection.x, this._targetDirection.y).normalize();
 
     const moveX = this._velocity.x * this.speed * dt;
     const moveY = this._velocity.y * this.speed * dt;
@@ -118,6 +119,19 @@ export class PlayerController extends Component {
 
     this.node.setPosition(pos);
   }
+  private updateFacing() {
+  if (this._targetDirection.x === 0) return;
+
+  const scale = this.node.scale.clone();
+
+  if (this._targetDirection.x > 0) {
+    scale.x = Math.abs(scale.x);   // quay phải
+  } else {
+    scale.x = -Math.abs(scale.x);  // quay trái
+  }
+
+  this.node.setScale(scale);
+}
 
   // =======================
   // ANIMATION
@@ -127,9 +141,9 @@ export class PlayerController extends Component {
     if (this._isSpawning) return;
 
     if (this._velocity.length() > 0.01) {
-      if (this._currentAnim !== "walk") {
-        this.animation.setAnimation(0, "walk", true);
-        this._currentAnim = "walk";
+      if (this._currentAnim !== "run") {
+        this.animation.setAnimation(0, "run", true);
+        this._currentAnim = "run";
       }
     } else {
       if (this._currentAnim !== "idle") {
@@ -147,6 +161,7 @@ export class PlayerController extends Component {
     if (this._isSpawning) return;
 
     this._isShooting = true;
+    this.updateFacing();
 
     this.animation.setAnimation(1, "shoot", false);
   }
