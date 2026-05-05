@@ -1,4 +1,13 @@
-import { _decorator, Component, Node, Prefab, instantiate, Vec3, isValid, UITransform } from "cc";
+import {
+  _decorator,
+  Component,
+  Node,
+  Prefab,
+  instantiate,
+  Vec3,
+  isValid,
+  UITransform,
+} from "cc";
 import { eventEmitter } from "../../core/EventEmitter";
 import { EVENT } from "../../constants/EventKey";
 import { BulletType } from "../../types/BulletType";
@@ -42,7 +51,7 @@ export class BulletSystem extends Component {
       this._move.set(
         comp.direction.x * comp.speed * dt,
         comp.direction.y * comp.speed * dt,
-        0
+        0,
       );
 
       bullet.getWorldPosition(this._currentPos);
@@ -50,24 +59,37 @@ export class BulletSystem extends Component {
       bullet.setWorldPosition(
         this._currentPos.x + this._move.x,
         this._currentPos.y + this._move.y,
-        this._currentPos.z
+        this._currentPos.z,
       );
     }
   }
 
- private onShoot(data: { pos: Vec3; dir: Vec3 }) {
-  const { pos, dir } = data;
+  private onShoot(data: { pos: Vec3; dir: Vec3 }) {
+    const { pos, dir } = data;
 
-  const bullet = instantiate(this.bulletPrefab);
-  this.bulletLayer.addChild(bullet);
-  bullet.setWorldPosition(pos);
-  const finalDir = new Vec3(dir.x >= 0 ? 1 : -1, 0, 0);
+    const bullet = instantiate(this.bulletPrefab);
+    this.bulletLayer.addChild(bullet);
+    bullet.setWorldPosition(pos);
+    const finalDir = new Vec3(dir.x >= 0 ? 1 : -1, 0, 0);
 
-  const comp = bullet.getComponent(BulletComponent);
-  if (!comp) return;
+    const comp = bullet.getComponent(BulletComponent);
+    if (!comp) return;
 
-  comp.init(BulletType.NORMAL, finalDir);
+    comp.init(BulletType.NORMAL, finalDir);
 
-  ECSWorld.instance.bullets.push(bullet);
-}
+    ECSWorld.instance.bullets.push(bullet);
+  }
+
+  clearAllBullets() {
+    const bullets = ECSWorld.instance.bullets;
+
+    for (let i = 0; i < bullets.length; i++) {
+      const bullet = bullets[i];
+      if (isValid(bullet)) {
+        bullet.destroy();
+      }
+    }
+
+    bullets.length = 0;
+  }
 }

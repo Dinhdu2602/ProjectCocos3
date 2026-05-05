@@ -55,6 +55,7 @@ export class RoomManager extends Component {
     console.log(">>> RESET GAME (Room)");
 
     this.disableGameplay();
+    this.bulletSystem.clearAllBullets();
 
     this.scheduleOnce(() => {
         this.enableGameplay();
