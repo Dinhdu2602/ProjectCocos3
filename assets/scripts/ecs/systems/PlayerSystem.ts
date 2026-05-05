@@ -146,6 +146,7 @@ export class PlayerSystem extends Component {
 
     eventEmitter.emit(EVENT.PLAYER_SHOOT, {
       pos,
+      dir: this.lastDirection.clone(),
     });
   }
 }

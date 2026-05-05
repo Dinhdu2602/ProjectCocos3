@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Prefab, instantiate, Vec3, isValid } from "cc";
+import { _decorator, Component, Node, Prefab, instantiate, Vec3, isValid, UITransform } from "cc";
 import { eventEmitter } from "../../core/EventEmitter";
 import { EVENT } from "../../constants/EventKey";
 import { BulletType } from "../../types/BulletType";
@@ -6,7 +6,6 @@ import { BulletComponent } from "../components/BulletComponent";
 import { ECSWorld } from "../core/ECSWorld";
 import GameManager from "../../core/GameManager";
 import { GameState } from "../../core/GameState";
-
 const { ccclass, property } = _decorator;
 
 @ccclass("BulletSystem")
@@ -56,61 +55,19 @@ export class BulletSystem extends Component {
     }
   }
 
-  private onShoot(data: { pos: Vec3 }) {
-    const { pos } = data;
+ private onShoot(data: { pos: Vec3; dir: Vec3 }) {
+  const { pos, dir } = data;
 
-    const enemies = ECSWorld.instance.enemies;
-    if (enemies.length === 0) return;
+  const bullet = instantiate(this.bulletPrefab);
+  this.bulletLayer.addChild(bullet);
+  bullet.setWorldPosition(pos);
+  const finalDir = new Vec3(dir.x >= 0 ? 1 : -1, 0, 0);
 
-    // =========================
-    // FIND NEAREST ENEMY
-    // =========================
-    let nearest = enemies[0];
-    let nearestPos = new Vec3();
-    nearest.getWorldPosition(nearestPos);
+  const comp = bullet.getComponent(BulletComponent);
+  if (!comp) return;
 
-    let minDist = Vec3.distance(pos, nearestPos);
+  comp.init(BulletType.NORMAL, finalDir);
 
-    for (let i = 1; i < enemies.length; i++) {
-      const e = enemies[i];
-      if (!isValid(e)) continue;
-
-      const p = new Vec3();
-      e.getWorldPosition(p);
-
-      const dist = Vec3.distance(pos, p);
-      if (dist < minDist) {
-        minDist = dist;
-        nearest = e;
-        nearestPos = p;
-      }
-    }
-
-    // =========================
-    // FIXED DIRECTION
-    // =========================
-    const dir = new Vec3();
-    Vec3.subtract(dir, nearestPos, pos);
-
-    if (dir.lengthSqr() === 0) return;
-
-    Vec3.normalize(dir, dir);
-
-    // =========================
-    // SPAWN BULLET
-    // =========================
-    const bullet = instantiate(this.bulletPrefab);
-    this.bulletLayer.addChild(bullet);
-    bullet.setWorldPosition(pos);
-
-    const comp = bullet.getComponent(BulletComponent);
-    if (!comp) return;
-
-    comp.init(BulletType.NORMAL, dir);
-
-    
-    comp.target = null;
-
-    ECSWorld.instance.bullets.push(bullet);
-  }
+  ECSWorld.instance.bullets.push(bullet);
+}
 }

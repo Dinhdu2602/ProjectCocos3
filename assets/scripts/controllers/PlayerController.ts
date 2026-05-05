@@ -152,6 +152,7 @@ export class PlayerController extends Component {
   }
 
   public getShootPoint(): Vec3 {
-    return this.shootPoint.worldPosition.clone();
+    const pos = this.shootPoint.worldPosition.clone();
+    return pos;
   }
 }
