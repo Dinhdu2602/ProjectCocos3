@@ -15,6 +15,7 @@ import { BulletComponent } from "../components/BulletComponent";
 import { ECSWorld } from "../core/ECSWorld";
 import GameManager from "../../core/GameManager";
 import { GameState } from "../../core/GameState";
+import { NodeUtils } from "../../utils/NodeUtils";
 const { ccclass, property } = _decorator;
 
 @ccclass("BulletSystem")
@@ -42,7 +43,7 @@ export class BulletSystem extends Component {
 
     for (let i = bullets.length - 1; i >= 0; i--) {
       const bullet = bullets[i];
-      if (!isValid(bullet)) continue;
+      NodeUtils.removeInvalidNodes(ECSWorld.instance.bullets);
 
       const comp = bullet.getComponent(BulletComponent);
       if (!comp) continue;
@@ -81,15 +82,6 @@ export class BulletSystem extends Component {
   }
 
   clearAllBullets() {
-    const bullets = ECSWorld.instance.bullets;
-
-    for (let i = 0; i < bullets.length; i++) {
-      const bullet = bullets[i];
-      if (isValid(bullet)) {
-        bullet.destroy();
-      }
-    }
-
-    bullets.length = 0;
+    NodeUtils.clearNodes(ECSWorld.instance.bullets);
   }
 }

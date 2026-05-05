@@ -1,5 +1,6 @@
-import { _decorator, Component, Vec3, view } from "cc";
+import { _decorator, Component, Vec3, isValid } from "cc";
 import { ECSWorld } from "../core/ECSWorld";
+import { NodeUtils } from "../../utils/NodeUtils";
 import { EnemyComponent } from "../components/EnemyComponent";
 import { GameState } from "../../core/GameState";
 import GameManager from "../../core/GameManager";
@@ -41,7 +42,7 @@ export class EnemySystem extends Component {
       }
 
       // =========================
-      // 2. DISTANCE CHECK 
+      // 2. DISTANCE CHECK
       // =========================
       const dist = Vec3.distance(pos, playerPos);
 
@@ -70,5 +71,9 @@ export class EnemySystem extends Component {
 
       node.setWorldPosition(pos.x + this._move.x, pos.y + this._move.y, pos.z);
     });
+  }
+
+  clearAllEnemies() {
+    NodeUtils.clearNodes(ECSWorld.instance.enemies);
   }
 }
