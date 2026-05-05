@@ -512,7 +512,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "DamageLabel",
+    "_name": "HPLabel",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1

@@ -13,65 +13,73 @@ export class EnemySystem extends Component {
   private _move = new Vec3();
 
   update(dt: number) {
-    if (GameManager.instance.state !== GameState.PLAYING) return;
+  if (GameManager.instance.state !== GameState.PLAYING) return;
 
-    const world = ECSWorld.instance;
-    const player = world.player;
-    if (!player || !player.isValid) return;
+  const world = ECSWorld.instance;
+  const player = world.player;
+  if (!player || !player.isValid) return;
 
-    const playerPos = player.worldPosition;
+  const playerPos = player.worldPosition;
 
-    world.enemies.forEach((node) => {
-      if (!node || !node.isValid) return;
+  world.enemies.forEach((node, index) => {
+    if (!node || !node.isValid) return;
 
-      const enemy = node.getComponent(EnemyComponent);
-      if (!enemy || enemy.isDead) return;
+    const enemy = node.getComponent(EnemyComponent);
+    if (!enemy || enemy.isDead) return;
 
-      const pos = node.getWorldPosition();
+    const pos = node.getWorldPosition();
 
-      // =========================
-      // 1. ENTRY
-      // =========================
-      const ENTRY_X = 250;
+    // =========================
+    // 0. OUT OF SCREEN LEFT → DESTROY
+    // =========================
+    const LEFT_BOUND = -500;
 
-      if (pos.x > ENTRY_X) {
-        const speed = enemy.speed || 80;
+    if (pos.x < LEFT_BOUND) {
+      node.destroy();
+      world.enemies.splice(index, 1);
+      return;
+    }
 
-        node.setWorldPosition(pos.x - speed * dt, pos.y, pos.z);
-        return;
-      }
+    // =========================
+    // 1. MOVE / AI
+    // =========================
+    const speed = Math.min(enemy.speed || 80, 80);
 
-      // =========================
-      // 2. DISTANCE CHECK
-      // =========================
-      const dist = Vec3.distance(pos, playerPos);
+    Vec3.subtract(this._dir, playerPos, pos);
+    Vec3.normalize(this._dir, this._dir);
 
-      const minDistance = 40;
-      const speed = Math.min(enemy.speed, 80);
+    const dist = Vec3.distance(pos, playerPos);
 
-      if (dist < minDistance) {
-        this._move.set(-this._dir.y * speed * dt, this._dir.x * speed * dt, 0);
+    // =========================
+    // 2. CHASE PLAYER
+    // =========================
+    const minDistance = 40;
 
-        node.setWorldPosition(
-          pos.x + this._move.x,
-          pos.y + this._move.y,
-          pos.z,
-        );
+    if (dist > minDistance) {
+      this._move.set(
+        this._dir.x * speed * dt,
+        this._dir.y * speed * dt,
+        0
+      );
+    } 
+    // =========================
+    // 3. KEEP DISTANCE / AVOID STACKING
+    // =========================
+    else {
+      this._move.set(
+        -this._dir.y * speed * dt,
+        this._dir.x * speed * dt,
+        0
+      );
+    }
 
-        return;
-      }
-
-      // =========================
-      // 3. CHASE PLAYER
-      // =========================
-      Vec3.subtract(this._dir, playerPos, pos);
-      Vec3.normalize(this._dir, this._dir);
-
-      this._move.set(this._dir.x * speed * dt, this._dir.y * speed * dt, 0);
-
-      node.setWorldPosition(pos.x + this._move.x, pos.y + this._move.y, pos.z);
-    });
-  }
+    node.setWorldPosition(
+      pos.x + this._move.x,
+      pos.y + this._move.y,
+      pos.z
+    );
+  });
+}
 
   clearAllEnemies() {
     NodeUtils.clearNodes(ECSWorld.instance.enemies);

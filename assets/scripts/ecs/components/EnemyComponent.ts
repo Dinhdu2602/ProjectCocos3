@@ -51,7 +51,7 @@ export class EnemyComponent extends Component {
         this.velocity.set(0, 0, 0);
 
         if (this.damageLabel) {
-            this.damageLabel.string = this.damage.toString();
+            this.damageLabel.string = this.hp.toString();
         }
     }
 
